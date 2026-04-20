@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - Eco Life Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --deep: #0a1a0f;
+            --forest: #1a3a2a;
+            --moss: #2d5a3d;
+            --sage: #4e8c62;
+            --mint: #7bbf8a;
+            --lime: #a8d5b5;
+            --cream: #f5f0e8;
+            --sand: #e8dfc8;
+            --warm: #f9f6f0;
+            --text: #1a2e1e;
+            --muted: #5a7060;
+            --gold: #c8a84b;
+            --gold2: #e8c86a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --r: 0.75rem;
+            --r2: 1.5rem;
+            --shadow-sm: 0 4px 16px rgba(26, 58, 42, .10);
+            --shadow-md: 0 8px 32px rgba(26, 58, 42, .14);
+            --shadow-lg: 0 20px 60px rgba(26, 58, 42, .18);
+            --shadow-xl: 0 32px 80px rgba(26, 58, 42, .22);
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--warm);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* ─── Page Transition ─── */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--deep);
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        /* ─── NAVBAR ─── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 26, 15, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.45rem;
+            color: var(--cream);
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand .gold-line {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            list-style: none;
+            margin: 0 auto;
+        }
+
+        .nav-links a {
+            color: rgba(245, 240, 232, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: var(--r);
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--mint);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover {
+            color: var(--cream);
+        }
+
+        .nav-links a:hover::after {
+            width: 60%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .nav-icon-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            color: var(--mint);
+            transform: translateY(-1px);
+        }
+
+        .nav-icon-btn.active-page {
+            color: var(--mint);
+            border-color: rgba(123, 191, 138, 0.4);
+        }
+
+        .cart-btn {
+            background: linear-gradient(135deg, var(--sage), var(--moss));
+            border: none;
+            border-radius: 50px;
+            padding: 0.45rem 1rem;
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.25s ease;
+        }
+
+        .cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 140, 98, .4);
+            color: var(--cream);
+        }
+
+        .cart-badge {
+            background: var(--gold);
+            color: var(--deep);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--r);
+            cursor: pointer;
+            padding: 8px;
+            transition: background 0.2s;
+        }
+
+        .hamburger:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2px;
+            background: var(--cream);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Mobile Drawer */
+        .mobile-drawer {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 26, 15, 0.97);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 999;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .mobile-drawer.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .mobile-drawer-inner {
+            padding: 1.25rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .mobile-drawer a {
+            color: rgba(245, 240, 232, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--r);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-drawer a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-drawer a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--mint);
+        }
+
+        .mobile-drawer a i {
+            width: 20px;
+            text-align: center;
+            color: var(--mint);
+        }
+
+        .drawer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 0.5rem 0;
+        }
+
+        .drawer-actions {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem 0;
+        }
+
+        .drawer-actions a {
+            flex: 1;
+            text-align: center;
+            justify-content: center;
+            padding: 0.65rem;
+            border-bottom: none !important;
+        }
+
+        .drawer-cart-btn {
+            background: linear-gradient(135deg, var(--sage), var(--moss)) !important;
+            color: var(--cream) !important;
+        }
+
+        /* ─── Hero ─── */
+        .hero-section {
+            background: linear-gradient(135deg, var(--deep) 0%, var(--forest) 100%);
+            color: var(--cream);
+            padding: 7rem 0 3.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 60% 50%, rgba(123, 191, 138, 0.12) 0%, transparent 60%);
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .hero-sub {
+            color: rgba(245, 240, 232, 0.6);
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .hero-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .hero-count i {
+            color: var(--gold);
+        }
+
+        /* ─── Main ─── */
+        main {
+            flex: 1;
+            padding: 3rem 0 5rem;
+        }
+
+        /* ─── Toolbar ─── */
+        .wishlist-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-eco {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            border-radius: 50px;
+            padding: 0.65rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-eco-primary {
+            background: linear-gradient(135deg, var(--sage), var(--moss));
+            color: var(--cream);
+        }
+
+        .btn-eco-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(78, 140, 98, .3);
+            color: white;
+        }
+
+        .btn-eco-outline {
+            background: white;
+            border: 2px solid var(--sand);
+            color: var(--text);
+        }
+
+        .btn-eco-outline:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+
+        .btn-eco-danger {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1.5px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .btn-eco-danger:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* ─── Grid ─── */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.75rem;
+        }
+
+        /* ─── Card ─── */
+        .wishlist-card {
+            background: white;
+            border-radius: var(--r2);
+            overflow: hidden;
+            border: 1px solid var(--sand);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .wishlist-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--lime);
+        }
+
+        /* Image */
+        .card-image {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--lime) 0%, var(--sand) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-image i {
+            font-size: 4rem;
+            color: var(--sage);
+            transition: transform 0.4s ease;
+        }
+
+        .wishlist-card:hover .card-image i {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--gold);
+            color: var(--deep);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .remove-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Info */
+        .card-info {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-category {
+            font-size: 0.72rem;
+            color: var(--sage);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.4rem;
+        }
+
+        .card-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            color: var(--text);
+        }
+
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-rating .stars {
+            color: var(--gold);
+        }
+
+        .card-price-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            margin-top: auto;
+        }
+
+        .card-price {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--sage);
+        }
+
+        .card-price-old {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-decoration: line-through;
+        }
+
+        .card-discount {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--success);
+            background: rgba(34, 197, 94, 0.1);
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .btn-view {
+            background: var(--warm);
+            border: 2px solid var(--sand);
+            border-radius: var(--r);
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.82rem;
+            padding: 0.6rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .btn-view:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+
+        .btn-add-cart {
+            background: linear-gradient(135deg, var(--sage), var(--moss));
+            border: none;
+            border-radius: var(--r);
+            color: white;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 0.6rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .btn-add-cart:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-add-cart.added {
+            background: linear-gradient(135deg, var(--success), #16a34a);
+        }
+
+        /* ─── Empty State ─── */
+        .wishlist-empty {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: white;
+            border-radius: var(--r2);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--sand);
+        }
+
+        .empty-icon {
+            width: 90px;
+            height: 90px;
+            background: var(--lime);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            animation: pulse-empty 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-empty {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(168, 213, 181, 0);
+            }
+
+            50% {
+                box-shadow: 0 0 0 14px rgba(168, 213, 181, 0.35);
+            }
+        }
+
+        .wishlist-empty h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .wishlist-empty p {
+            color: var(--muted);
+            margin-bottom: 2rem;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ─── Site Footer ─── */
+        .site-footer {
+            background: linear-gradient(135deg, var(--forest), var(--deep));
+            color: rgba(245, 240, 232, 0.5);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* ─── Toast ─── */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--r);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 260px;
+            max-width: 340px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast-icon {
+            font-size: 1.1rem;
+        }
+
+        .toast-success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast-error .toast-icon {
+            color: var(--danger);
+        }
+
+        .toast-msg {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-actions .cart-btn span:not(.cart-badge) {
+                display: none;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wishlist-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-left {
+                justify-content: stretch;
+            }
+
+            .toolbar-left .btn-eco {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .toast-container {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+
+            .toast {
+                min-width: unset;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Page Transition -->
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- ─── NAVBAR ─── -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="navbar-inner">
+            <a class="navbar-brand" href="index.html">🌿 Eco<span class="gold-line">_Life</span> Store</a>
+
+            <ul class="nav-links" role="list">
+                <li><a href="index.html"><i class="fas fa-home" style="margin-right:.3rem;font-size:.8rem"></i>Home</a>
+                </li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="wishlist.html" class="nav-icon-btn active-page" title="Wishlist" aria-label="Wishlist">
+                    <i class="fas fa-heart"></i>
+                </a>
+                <a href="cart.html" class="cart-btn" aria-label="Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"
+                    aria-controls="mobileDrawer">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ─── MOBILE DRAWER ─── -->
+    <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+        <div class="mobile-drawer-inner">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="products.html"><i class="fas fa-leaf"></i> Products</a>
+            <a href="about.html"><i class="fas fa-seedling"></i> About</a>
+            <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+            <div class="drawer-divider"></div>
+            <div class="drawer-actions">
+                <a href="wishlist.html" style="border:1px solid rgba(255,255,255,0.1);border-radius:var(--r);">
+                    <i class="fas fa-heart"></i> Wishlist
+                </a>
+                <a href="cart.html" class="drawer-cart-btn" style="border-radius:var(--r);">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">My Wishlist</h1>
+            <p class="hero-sub">Your favourite eco-friendly products, saved for later</p>
+            <div class="hero-count" id="heroCount">
+                <i class="fas fa-heart"></i>
+                <span id="heroCountText">3 items saved</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── MAIN ─── -->
+    <main>
+        <div class="container">
+
+            <!-- Toolbar (shown when items exist) -->
+            <div class="wishlist-toolbar" id="wishlistToolbar" style="display:none;">
+                <div class="toolbar-left">
+                    <button class="btn-eco btn-eco-primary" onclick="addAllToCart()">
+                        <i class="fas fa-cart-plus"></i> Add All to Cart
+                    </button>
+                    <button class="btn-eco btn-eco-outline" onclick="window.location.href='products.html'">
+                        <i class="fas fa-shopping-bag"></i> Continue Shopping
+                    </button>
+                </div>
+                <button class="btn-eco btn-eco-danger" onclick="clearWishlist()">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+
+            <!-- Empty state -->
+            <div id="emptyState" class="wishlist-empty" style="display:none;">
+                <div class="empty-icon">🤍</div>
+                <h2>Your Wishlist is Empty</h2>
+                <p>Discover our eco-friendly products and save the ones you love for later.</p>
+                <button class="btn-eco btn-eco-primary" onclick="window.location.href='products.html'"
+                    style="margin:0 auto;">
+                    <i class="fas fa-leaf"></i> Browse Products
+                </button>
+            </div>
+
+            <!-- Wishlist grid -->
+            <div id="wishlistGrid" class="wishlist-grid"></div>
+
+        </div>
+    </main>
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="site-footer">
+        <p>&copy; 2024 Eco Life Store. Made with 💚 for a better planet.</p>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // ─── Page Transition ───
+        gsap.to("#pageTransition", {
+            y: "-100%", duration: 0.7, ease: "power3.out", delay: 0.05,
+            onComplete: () => document.getElementById('pageTransition').style.display = 'none'
+        });
+
+        // ─── Hamburger / Mobile Drawer ───
+        const hamburger = document.getElementById('hamburger');
+        const drawer = document.getElementById('mobileDrawer');
+        let drawerOpen = false;
+
+        function toggleDrawer(state) {
+            drawerOpen = (state !== undefined) ? state : !drawerOpen;
+            hamburger.classList.toggle('active', drawerOpen);
+            drawer.classList.toggle('open', drawerOpen);
+            hamburger.setAttribute('aria-expanded', drawerOpen);
+            drawer.setAttribute('aria-hidden', !drawerOpen);
+            document.body.style.overflow = drawerOpen ? 'hidden' : '';
+        }
+
+        hamburger.addEventListener('click', () => toggleDrawer());
+        drawer.querySelectorAll('a').forEach(l => l.addEventListener('click', () => toggleDrawer(false)));
+        document.addEventListener('click', (e) => {
+            if (drawerOpen && !drawer.contains(e.target) && !hamburger.contains(e.target)) toggleDrawer(false);
+        });
+        window.addEventListener('resize', () => { if (window.innerWidth > 768 && drawerOpen) toggleDrawer(false); });
+
+        // ─── Wishlist Data ───
+        let wishlistItems = [
+            { id: 1, name: 'Organic Cotton T-Shirt', category: 'Fashion', price: 49.99, oldPrice: 64.99, rating: 4.8, reviews: 128, icon: 'fas fa-shirt', badge: 'Sale' },
+            { id: 2, name: 'Bamboo Toothbrush Set', category: 'Personal Care', price: 19.99, oldPrice: null, rating: 4.9, reviews: 87, icon: 'fas fa-tooth', badge: 'Best Seller' },
+            { id: 3, name: 'Eco Water Bottle', category: 'Home', price: 34.99, oldPrice: 44.99, rating: 4.7, reviews: 213, icon: 'fas fa-bottle-water', badge: 'Sale' },
+        ];
+
+        // ─── Render ───
+        function renderWishlist() {
+            const grid = document.getElementById('wishlistGrid');
+            const empty = document.getElementById('emptyState');
+            const toolbar = document.getElementById('wishlistToolbar');
+            const heroText = document.getElementById('heroCountText');
+
+            heroText.textContent = wishlistItems.length
+                ? `${wishlistItems.length} item${wishlistItems.length > 1 ? 's' : ''} saved`
+                : 'No items saved';
+
+            if (wishlistItems.length === 0) {
+                grid.innerHTML = '';
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+                toolbar.style.display = 'none';
+                return;
+            }
+
+            empty.style.display = 'none';
+            toolbar.style.display = 'flex';
+            grid.style.display = 'grid';
+
+            grid.innerHTML = wishlistItems.map((item, i) => {
+                const discount = item.oldPrice
+                    ? Math.round((1 - item.price / item.oldPrice) * 100)
+                    : null;
+                const stars = '★'.repeat(Math.round(item.rating)) + '☆'.repeat(5 - Math.round(item.rating));
+
+                return `
+                <div class="wishlist-card" id="card-${item.id}" style="animation-delay:${i * 0.08}s">
+                    <div class="card-image">
+                        ${item.badge ? `<span class="card-badge">${item.badge}</span>` : ''}
+                        <button class="remove-btn" onclick="removeItem(${item.id})" title="Remove from wishlist">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <i class="${item.icon}"></i>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-category">${item.category}</div>
+                        <div class="card-name">${item.name}</div>
+                        <div class="card-rating">
+                            <span class="stars">${stars}</span>
+                            <span>${item.rating} (${item.reviews} reviews)</span>
+                        </div>
+                        <div class="card-price-row">
+                            <span class="card-price">$${item.price.toFixed(2)}</span>
+                            ${item.oldPrice ? `<span class="card-price-old">$${item.oldPrice.toFixed(2)}</span>` : ''}
+                            ${discount ? `<span class="card-discount">-${discount}%</span>` : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-view" onclick="viewProduct(${item.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn-add-cart" id="cartBtn-${item.id}" onclick="addToCart(${item.id}, this)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Animate cards in
+            gsap.to('.wishlist-card', {
+                opacity: 1, y: 0, duration: 0.5,
+                stagger: 0.08, ease: "power2.out", delay: 0.1
+            });
+        }
+
+        // ─── Actions ───
+        function removeItem(id) {
+            const card = document.getElementById(`card-${id}`);
+            gsap.to(card, {
+                opacity: 0, scale: 0.85, duration: 0.3, ease: "power2.in",
+                onComplete: () => {
+                    wishlistItems = wishlistItems.filter(i => i.id !== id);
+                    renderWishlist();
+                    showToast('Removed from wishlist', 'error');
+                }
+            });
+        }
+
+        function addToCart(id, btn) {
+            btn.classList.add('added');
+            btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+            btn.disabled = true;
+            showToast('Added to cart successfully!', 'success');
+            setTimeout(() => {
+                btn.classList.remove('added');
+                btn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        function addAllToCart() {
+            document.querySelectorAll('.btn-add-cart').forEach(btn => {
+                if (!btn.disabled) {
+                    btn.classList.add('added');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    btn.disabled = true;
+                }
+            });
+            showToast(`${wishlistItems.length} items added to cart!`, 'success');
+            setTimeout(() => {
+                document.querySelectorAll('.btn-add-cart').forEach(btn => {
+                    btn.classList.remove('added');
+                    btn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
+                    btn.disabled = false;
+                });
+            }, 2000);
+        }
+
+        function clearWishlist() {
+            gsap.to('.wishlist-card', {
+                opacity: 0, y: -20, stagger: 0.05, duration: 0.3,
+                onComplete: () => {
+                    wishlistItems = [];
+                    renderWishlist();
+                    showToast('Wishlist cleared', 'error');
+                }
+            });
+        }
+
+        function viewProduct(id) {
+            window.location.href = `product-detail.html?id=${id}`;
+        }
+
+        // ─── Toast ───
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            toast.innerHTML = `<i class="fas fa-${icon} toast-icon"></i><span class="toast-msg">${message}</span>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('show')));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // ─── Init ───
+        renderWishlist();
+    </script>
+</body>
+
+</html>

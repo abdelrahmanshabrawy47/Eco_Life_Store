@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Eco Life Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --deep: #0a1a0f;
+            --forest: #1a3a2a;
+            --moss: #2d5a3d;
+            --sage: #4e8c62;
+            --mint: #7bbf8a;
+            --lime: #a8d5b5;
+            --cream: #f5f0e8;
+            --sand: #e8dfc8;
+            --warm: #f9f6f0;
+            --text: #1a2e1e;
+            --muted: #5a7060;
+            --gold: #c8a84b;
+            --gold2: #e8c86a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --r: 0.75rem;
+            --r2: 1.5rem;
+            --r3: 2rem;
+            --shadow-sm: 0 4px 16px rgba(26, 58, 42, .10);
+            --shadow-md: 0 8px 32px rgba(26, 58, 42, .14);
+            --shadow-lg: 0 20px 60px rgba(26, 58, 42, .18);
+            --shadow-xl: 0 32px 80px rgba(26, 58, 42, .22);
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-blur: blur(20px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--warm);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            position: absolute;
+            top: -4px;
+            left: -4px;
+        }
+
+        .cursor-ring {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--sage);
+            border-radius: 50%;
+            position: absolute;
+            top: -18px;
+            left: -18px;
+            transition: all 0.3s ease;
+        }
+
+        .cursor-hover .cursor-ring {
+            width: 52px;
+            height: 52px;
+            top: -26px;
+            left: -26px;
+            background: rgba(78, 140, 98, 0.2);
+        }
+
+        /* Page Transition */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--deep);
+            z-index: 10000;
+            transform: translateY(0);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background: rgba(10, 26, 15, 0.88);
+            backdrop-filter: blur(24px);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--cream);
+        }
+
+        .navbar-brand .gold-line {
+            color: var(--gold);
+        }
+
+        .nav-link {
+            color: var(--cream) !important;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--mint);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cart-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            color: var(--cream);
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--gold);
+            color: var(--deep);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--deep) 0%, var(--forest) 100%);
+            color: var(--cream);
+            padding: 6rem 0 3rem;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Checkout Section */
+        .checkout-section {
+            padding: 4rem 0;
+        }
+
+        .checkout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .checkout-form {
+            background: white;
+            border-radius: var(--r2);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid var(--sand);
+        }
+
+        .checkout-header {
+            background: var(--cream);
+            padding: 2rem;
+            border-bottom: 1px solid var(--sand);
+        }
+
+        .checkout-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkout-subtitle {
+            color: var(--muted);
+        }
+
+        .checkout-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: calc(100% - 30px);
+            height: 2px;
+            background: var(--sand);
+            z-index: 1;
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: var(--sage);
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--sand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 0.875rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--sage);
+            color: var(--cream);
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--gold);
+            color: var(--deep);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .checkout-content {
+            padding: 3rem;
+        }
+
+        .form-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            flex: none;
+            width: 100%;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--sand);
+            border-radius: var(--r);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(78, 140, 98, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-method {
+            flex: 1;
+            border: 2px solid var(--sand);
+            border-radius: var(--r);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover,
+        .payment-method.selected {
+            border-color: var(--sage);
+            background: var(--lime);
+        }
+
+        .payment-method-icon {
+            font-size: 2rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-method.selected .payment-method-icon {
+            color: var(--sage);
+        }
+
+        .payment-method-label {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--cream);
+            border-radius: var(--r2);
+            padding: 2rem;
+            border: 1px solid var(--sand);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--sand);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text);
+        }
+
+        .summary-label {
+            color: var(--muted);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .summary-products {
+            margin-bottom: 2rem;
+        }
+
+        .summary-product {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--sand);
+        }
+
+        .summary-product:last-child {
+            border-bottom: none;
+        }
+
+        .summary-product-image {
+            width: 50px;
+            height: 50px;
+            background: var(--lime);
+            border-radius: var(--r);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .summary-product-info {
+            flex: 1;
+        }
+
+        .summary-product-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-product-meta {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .summary-product-price {
+            font-weight: 600;
+            color: var(--sage);
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--sage);
+            color: var(--cream);
+            border: none;
+            border-radius: var(--r);
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .place-order-btn:hover {
+            background: var(--mint);
+            transform: translateY(-2px);
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--deep) 100%);
+            color: var(--cream);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo .gold-line {
+            color: var(--gold);
+        }
+
+        .footer-tagline {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            transition: all 0.3s ease;
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .social-icon:hover {
+            background: var(--gold);
+            color: var(--deep);
+            transform: scale(1.1);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--cream);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--mint);
+        }
+
+        .footer-contact {
+            color: var(--muted);
+        }
+
+        .footer-copyright {
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1001;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--r);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast-warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .toast-info {
+            border-left: 4px solid var(--info);
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gold);
+            width: 100%;
+            animation: progress 3s linear forwards;
+        }
+
+        @keyframes progress {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 26, 15, 0.95);
+            backdrop-filter: blur(24px);
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateY(0);
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu li {
+            margin-bottom: 2rem;
+        }
+
+        .mobile-menu a {
+            color: var(--cream);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--mint);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .checkout-content {
+                padding: 2rem 1rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .payment-methods {
+                flex-direction: column;
+            }
+
+            .navbar-nav {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .checkout-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .checkout-form {
+                order: 2;
+            }
+
+            .order-summary {
+                order: 1;
+                position: static;
+                top: auto;
+                height: auto;
+            }
+
+            .form-section {
+                margin-bottom: 2rem;
+                padding: 1.5rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .payment-methods {
+                gap: 1rem;
+            }
+
+            .payment-method {
+                padding: 1rem;
+            }
+
+            .order-items {
+                margin-bottom: 2rem;
+            }
+
+            .order-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .item-image {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .summary-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .summary-item {
+                justify-content: space-between;
+                padding: 0.5rem 0;
+            }
+
+            .checkout-btn {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .checkout-content {
+                padding: 1rem 0.5rem;
+            }
+
+            .form-section h3 {
+                font-size: 1.25rem;
+            }
+
+            .payment-method {
+                padding: 0.75rem;
+            }
+
+            .order-item h4 {
+                font-size: 1rem;
+            }
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--cream);
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Transition -->
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                🌿 Eco<span class="gold-line">_Life</span> Store
+            </a>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="wishlist.html" class="btn btn-link text-white" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                    <a href="cart.html" class="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge">0</span>
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light rounded-pill dropdown-toggle" type="button"
+                            id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> Account
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                            <li><a class="dropdown-item" href="account.html" id="accountLink" style="display:none;"><i
+                                        class="fas fa-user me-2"></i>My Account</a></li>
+                            <li><a class="dropdown-item" href="login.html" id="loginLink"><i
+                                        class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                            <li><a class="dropdown-item" href="register.html" id="registerLink"><i
+                                        class="fas fa-user-plus me-2"></i>Register</a></li>
+                            <li>
+                                <hr class="dropdown-divider" id="logoutDivider" style="display:none;">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="logoutLink" style="display:none;"
+                                    onclick="logout(event)"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="wishlist.html">Wishlist</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="account.html" id="mobileAccountLink" style="display:none;">My Account</a></li>
+            <li><a href="login.html" id="mobileLoginLink">Login</a></li>
+            <li><a href="register.html" id="mobileRegisterLink">Register</a></li>
+        </ul>
+    </div>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    </ul>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Checkout</h1>
+            <p class="page-subtitle">Complete your sustainable purchase</p>
+        </div>
+    </section>
+
+    <!-- Checkout Section -->
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-container">
+                <div class="checkout-form">
+                    <div class="checkout-header">
+                        <h2 class="checkout-title">Secure Checkout</h2>
+                        <p class="checkout-subtitle">Your information is protected with 256-bit SSL encryption</p>
+                        <div class="checkout-progress">
+                            <div class="progress-step completed">
+                                <div class="step-circle">1</div>
+                                <div class="step-label">Cart</div>
+                            </div>
+                            <div class="progress-step active">
+                                <div class="step-circle">2</div>
+                                <div class="step-label">Checkout</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-circle">3</div>
+                                <div class="step-label">Payment</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-circle">4</div>
+                                <div class="step-label">Complete</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkout-content">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <!-- Contact Information -->
+                                <div class="form-section">
+                                    <h3 class="section-title">Contact Information</h3>
+                                    <div class="form-group">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" placeholder="your@email.com" required>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" class="checkbox-input" id="newsletter">
+                                        <label class="checkbox-label" for="newsletter">
+                                            Email me with news and offers from Eco Life Store
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Shipping Address -->
+                                <div class="form-section">
+                                    <h3 class="section-title">Shipping Address</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" placeholder="John" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" placeholder="Doe" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control" placeholder="123 Main Street" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">City</label>
+                                            <input type="text" class="form-control" placeholder="Cairo" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Postal Code</label>
+                                            <input type="text" class="form-control" placeholder="12345" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" placeholder="+20 123 456 7890" required>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" class="checkbox-input" id="saveAddress">
+                                        <label class="checkbox-label" for="saveAddress">
+                                            Save this address for future orders
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Shipping Method -->
+                                <div class="form-section">
+                                    <h3 class="section-title">Shipping Method</h3>
+                                    <div class="shipping-options">
+                                        <div class="checkbox-group">
+                                            <input type="radio" class="checkbox-input" name="shipping" id="standard"
+                                                checked>
+                                            <label class="checkbox-label" for="standard">
+                                                <strong>Standard Delivery (3-5 days)</strong><br>
+                                                <span style="color: var(--sage); font-weight: 600;">EGP 50</span> - Free
+                                                on orders over EGP 500
+                                            </label>
+                                        </div>
+                                        <div class="checkbox-group">
+                                            <input type="radio" class="checkbox-input" name="shipping" id="express">
+                                            <label class="checkbox-label" for="express">
+                                                <strong>Express Delivery (1-2 days)</strong><br>
+                                                <span style="color: var(--sage); font-weight: 600;">EGP 80</span>
+                                            </label>
+                                        </div>
+                                        <div class="checkbox-group">
+                                            <input type="radio" class="checkbox-input" name="shipping" id="pickup">
+                                            <label class="checkbox-label" for="pickup">
+                                                <strong>Pickup at Store</strong><br>
+                                                <span style="color: var(--success); font-weight: 600;">Free</span> -
+                                                Available in Cairo
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Method -->
+                                <div class="form-section">
+                                    <h3 class="section-title">Payment Method</h3>
+                                    <div class="payment-methods">
+                                        <div class="payment-method selected" data-method="card">
+                                            <div class="payment-method-icon">
+                                                <i class="fas fa-credit-card"></i>
+                                            </div>
+                                            <div class="payment-method-label">Credit Card</div>
+                                        </div>
+                                        <div class="payment-method" data-method="paypal">
+                                            <div class="payment-method-icon">
+                                                <i class="fab fa-paypal"></i>
+                                            </div>
+                                            <div class="payment-method-label">PayPal</div>
+                                        </div>
+                                        <div class="payment-method" data-method="cash">
+                                            <div class="payment-method-icon">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                            </div>
+                                            <div class="payment-method-label">Cash on Delivery</div>
+                                        </div>
+                                    </div>
+
+                                    <div id="cardFields">
+                                        <div class="form-row">
+                                            <div class="form-group full-width">
+                                                <label class="form-label">Card Number</label>
+                                                <input type="text" class="form-control"
+                                                    placeholder="1234 5678 9012 3456" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label class="form-label">Expiry Date</label>
+                                                <input type="text" class="form-control" placeholder="MM/YY" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">CVV</label>
+                                                <input type="text" class="form-control" placeholder="123" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Cardholder Name</label>
+                                            <input type="text" class="form-control" placeholder="John Doe" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="order-summary">
+                                    <h3 class="section-title">Order Summary</h3>
+
+                                    <div class="summary-products">
+                                        <div class="summary-product">
+                                            <div class="summary-product-image">
+                                                <i class="fas fa-tshirt fa-lg text-success"></i>
+                                            </div>
+                                            <div class="summary-product-info">
+                                                <div class="summary-product-title">Organic Cotton T-Shirt</div>
+                                                <div class="summary-product-meta">Qty: 1</div>
+                                            </div>
+                                            <div class="summary-product-price">EGP 250</div>
+                                        </div>
+                                        <div class="summary-product">
+                                            <div class="summary-product-image">
+                                                <i class="fas fa-pump-soap fa-lg text-info"></i>
+                                            </div>
+                                            <div class="summary-product-info">
+                                                <div class="summary-product-title">Natural Shampoo Bar</div>
+                                                <div class="summary-product-meta">Qty: 2</div>
+                                            </div>
+                                            <div class="summary-product-price">EGP 190</div>
+                                        </div>
+                                        <div class="summary-product">
+                                            <div class="summary-product-image">
+                                                <i class="fas fa-seedling fa-lg text-success"></i>
+                                            </div>
+                                            <div class="summary-product-info">
+                                                <div class="summary-product-title">Herb Garden Kit</div>
+                                                <div class="summary-product-meta">Qty: 1</div>
+                                            </div>
+                                            <div class="summary-product-price">EGP 120</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-item">
+                                        <span class="summary-label">Subtotal</span>
+                                        <span class="summary-value">EGP 560</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Shipping</span>
+                                        <span class="summary-value">EGP 50</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Tax</span>
+                                        <span class="summary-value">EGP 39</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Discount</span>
+                                        <span class="summary-value text-success">-EGP 28</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Total</span>
+                                        <span class="summary-value">EGP 621</span>
+                                    </div>
+
+                                    <button class="place-order-btn" id="placeOrderBtn">
+                                        <i class="fas fa-lock"></i> Place Order
+                                    </button>
+
+                                    <div class="secure-badge">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Secure checkout with SSL encryption</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <div class="footer-logo">
+                        🌿 Eco<span class="gold-line">_Life</span> Store
+                    </div>
+                    <p class="footer-tagline">Sustainable living for a better planet</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h5>Shop</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Home Products</a></li>
+                        <li><a href="#">Personal Care</a></li>
+                        <li><a href="#">Organic Food</a></li>
+                        <li><a href="#">Sustainable Fashion</a></li>
+                        <li><a href="#">Garden</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h5>Help</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Contact</h5>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt me-2"></i>Cairo, Egypt</p>
+                        <p><i class="fas fa-phone me-2"></i>+20 123 456 7890</p>
+                        <p><i class="fas fa-envelope me-2"></i>hello@ecolifestore.com</p>
+                    </div>
+                    <h6 class="mt-3">Newsletter</h6>
+                    <form class="mt-2">
+                        <input type="email" class="form-control mb-2" placeholder="Your email"
+                            style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--cream);">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2024 Eco Life Store. Made with 💚 for a better planet.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Page Transition
+        gsap.set("#pageTransition", { y: 0 });
+        gsap.to("#pageTransition", { y: "-100%", duration: 0.6, ease: "power2.out", delay: 0.1 });
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorDot = cursor.querySelector('.cursor-dot');
+        const cursorRing = cursor.querySelector('.cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0 });
+            gsap.to(cursorRing, { x: e.clientX, y: e.clientY, duration: 0.3, ease: "power2.out" });
+        });
+
+        document.addEventListener('mouseenter', () => cursor.style.display = 'block', true);
+        document.addEventListener('mouseleave', () => cursor.style.display = 'none', true);
+
+        document.querySelectorAll('a, button, .payment-method').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
+        // Mobile Menu
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        // Payment Method Selection
+        const paymentMethods = document.querySelectorAll('.payment-method');
+
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', () => {
+                paymentMethods.forEach(m => m.classList.remove('selected'));
+                method.classList.add('selected');
+            });
+        });
+
+        // Form Validation
+        const form = document.querySelector('.checkout-form');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+        placeOrderBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Basic validation
+            const requiredFields = form.querySelectorAll('input[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'var(--danger)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = 'var(--sand)';
+                }
+            });
+
+            if (isValid) {
+                gsap.to(placeOrderBtn, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
+                showToast('Processing your order...', 'info');
+
+                // Simulate order processing
+                setTimeout(() => {
+                    showToast('Order placed successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                }, 2000);
+            } else {
+                showToast('Please fill in all required fields', 'error');
+            }
+        });
+
+        // Toast Notifications
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                <span>${message}</span>
+                <div class="toast-progress"></div>
+            `;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Update Login UI based on authentication status
+        function updateLoginUI() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const accountLink = document.getElementById('accountLink');
+            const loginLink = document.getElementById('loginLink');
+            const registerLink = document.getElementById('registerLink');
+            const logoutDivider = document.getElementById('logoutDivider');
+            const logoutLink = document.getElementById('logoutLink');
+            const mobileAccountLink = document.getElementById('mobileAccountLink');
+            const mobileLoginLink = document.getElementById('mobileLoginLink');
+            const mobileRegisterLink = document.getElementById('mobileRegisterLink');
+
+            if (isLoggedIn) {
+                accountLink.style.display = 'block';
+                loginLink.style.display = 'none';
+                registerLink.style.display = 'none';
+                logoutDivider.style.display = 'block';
+                logoutLink.style.display = 'block';
+                if (mobileAccountLink) mobileAccountLink.style.display = 'block';
+                if (mobileLoginLink) mobileLoginLink.style.display = 'none';
+                if (mobileRegisterLink) mobileRegisterLink.style.display = 'none';
+            } else {
+                accountLink.style.display = 'none';
+                loginLink.style.display = 'block';
+                registerLink.style.display = 'block';
+                logoutDivider.style.display = 'none';
+                logoutLink.style.display = 'none';
+                if (mobileAccountLink) mobileAccountLink.style.display = 'none';
+                if (mobileLoginLink) mobileLoginLink.style.display = 'block';
+                if (mobileRegisterLink) mobileRegisterLink.style.display = 'block';
+            }
+        }
+
+        // Logout function
+        function logout(event) {
+            event.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            window.location.href = 'login.html';
+        }
+
+        // Call updateLoginUI on page load
+        updateLoginUI();
+    </script>
+</body>
+
+</html>

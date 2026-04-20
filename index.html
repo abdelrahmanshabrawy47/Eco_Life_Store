@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Life Store - Premium Eco-Friendly E-Commerce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- ✅ FIX: GSAP scripts moved to end of body — loading in <head> can block rendering -->
+    <style>
+        :root {
+            --deep: #0a1a0f;
+            --forest: #1a3a2a;
+            --moss: #2d5a3d;
+            --sage: #4e8c62;
+            --mint: #7bbf8a;
+            --lime: #a8d5b5;
+            --cream: #f5f0e8;
+            --sand: #e8dfc8;
+            --warm: #f9f6f0;
+            --text: #1a2e1e;
+            --muted: #5a7060;
+            --gold: #c8a84b;
+            --gold2: #e8c86a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --r: 0.75rem;
+            --r2: 1.5rem;
+            --r3: 2rem;
+            --shadow-sm: 0 4px 16px rgba(26,58,42,.10);
+            --shadow-md: 0 8px 32px rgba(26,58,42,.14);
+            --shadow-lg: 0 20px 60px rgba(26,58,42,.18);
+            --shadow-xl: 0 32px 80px rgba(26,58,42,.22);
+            --glass-bg: rgba(255,255,255,0.07);
+            --glass-border: rgba(255,255,255,0.12);
+            --glass-blur: blur(20px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--warm);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            display: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            position: absolute;
+            top: -4px;
+            left: -4px;
+        }
+
+        .cursor-ring {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--sage);
+            border-radius: 50%;
+            position: absolute;
+            top: -18px;
+            left: -18px;
+            transition: all 0.3s ease;
+        }
+
+        .cursor-hover .cursor-ring {
+            width: 52px;
+            height: 52px;
+            top: -26px;
+            left: -26px;
+            background: rgba(78,140,98,0.2);
+        }
+
+        /* Page Transition */
+        .page-transition {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--deep);
+            z-index: 10000;
+        }
+
+        /* ✅ FIX: navbar-expand-lg instead of navbar-expand-sm */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background: transparent;
+            padding: 1rem 0;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10,26,15,0.92);
+            backdrop-filter: blur(24px);
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--cream) !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand .gold-line { color: var(--gold); }
+
+        /* ✅ FIX: Custom toggler icon for dark navbar */
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.4) !important;
+            padding: 0.4rem 0.6rem;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28245, 240, 232, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+
+        .nav-link {
+            color: rgba(245,240,232,0.85) !important;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.75rem !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0.75rem;
+            width: 0;
+            height: 2px;
+            background: var(--mint);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--cream) !important;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: calc(100% - 1.5rem);
+        }
+
+        /* ✅ Active nav indicator */
+        .nav-link.active {
+            color: var(--mint) !important;
+        }
+
+        .cart-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            color: var(--cream) !important;
+            position: relative;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .cart-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--cream) !important;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px; right: -8px;
+            background: var(--gold);
+            color: var(--deep);
+            border-radius: 50%;
+            width: 20px; height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--deep) 0%, var(--forest) 100%);
+        }
+
+        .hero-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+
+        .floating-blob {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(168,213,181,0.1);
+            filter: blur(40px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-blob:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-blob:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 15%; animation-delay: 2s; }
+        .floating-blob:nth-child(3) { width: 150px; height: 150px; bottom: 20%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--cream);
+            z-index: 2;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+
+        .hero-badge .pulse {
+            width: 8px; height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            color: var(--cream);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        .btn-hero {
+            background: var(--sage);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            color: var(--cream);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-hero:hover {
+            background: var(--mint);
+            transform: translateY(-3px);
+            color: var(--deep);
+            box-shadow: 0 10px 30px rgba(123,191,138,0.4);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .section.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header { margin-bottom: 3.5rem; }
+        .section-header h2 { margin-bottom: 0.75rem; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+        .section-header p { color: var(--muted); font-size: 1.05rem; }
+
+        /* Categories */
+        .categories { background: var(--cream); }
+
+        .category-card {
+            background: white;
+            border-radius: var(--r2);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--sand);
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--mint);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            color: var(--sage);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .category-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .category-card p { color: var(--muted); font-size: 0.9rem; font-family: 'DM Sans', sans-serif; }
+
+        /* Products */
+        .products { background: var(--warm); }
+
+        .product-card {
+            background: white;
+            border-radius: var(--r2);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--sand);
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .product-image {
+            height: 220px;
+            background: linear-gradient(135deg, var(--lime) 0%, var(--mint) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image { transform: scale(1.05); }
+
+        .product-image i { font-size: 3.5rem; opacity: 0.7; }
+
+        .product-info { padding: 1.5rem; }
+        .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+
+        .product-price {
+            color: var(--sage);
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+        .product-tag {
+            background: var(--lime);
+            color: var(--moss);
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            margin-top: 1rem;
+            background: var(--sage);
+            color: var(--cream);
+            border: none;
+            border-radius: 50px;
+            padding: 0.6rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--moss);
+            transform: translateY(-1px);
+        }
+
+        /* Stats */
+        .stats { background: var(--warm); }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--r2);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--sand);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon { font-size: 2.5rem; color: var(--sage); margin-bottom: 1rem; }
+
+        /* ✅ FIX: stat-number now animated by JS counter */
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label { color: var(--muted); font-weight: 500; }
+
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(135deg, var(--moss) 0%, var(--forest) 100%);
+            color: var(--cream);
+            text-align: center;
+        }
+
+        .newsletter-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            color: var(--cream);
+            width: 100%;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .newsletter-input:focus { border-color: rgba(255,255,255,0.5); }
+        .newsletter-input::placeholder { color: rgba(245,240,232,0.6); }
+
+        /* Testimonials */
+        .testimonials { background: var(--cream); }
+
+        .testimonial-card {
+            background: white;
+            border-radius: var(--r2);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--sand);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--muted);
+            position: relative;
+            padding-top: 1.5rem;
+            line-height: 1.7;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .testimonial-content::before {
+            content: '"';
+            font-size: 5rem;
+            color: var(--lime);
+            position: absolute;
+            top: -1.5rem;
+            left: -0.5rem;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+
+        .author-avatar {
+            width: 46px; height: 46px;
+            background: var(--sage);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--cream);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .author-name { font-weight: 600; color: var(--text); font-size: 0.95rem; }
+        .author-title { color: var(--muted); font-size: 0.8rem; }
+        .testimonial-rating { color: var(--gold); font-size: 0.85rem; }
+
+        /* Blog */
+        .blog { background: var(--warm); }
+
+        .blog-card {
+            background: white;
+            border-radius: var(--r2);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--sand);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .blog-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--lime), var(--sage));
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.4s ease;
+            overflow: hidden;
+        }
+
+        .blog-card:hover .blog-image { transform: scale(1.05); }
+        .blog-image i { font-size: 2.5rem; opacity: 0.7; }
+
+        .blog-content { padding: 1.5rem; }
+        .blog-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+        .blog-excerpt { color: var(--muted); margin-bottom: 1rem; line-height: 1.6; font-size: 0.9rem; }
+
+        .blog-link {
+            color: var(--sage);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .blog-link:hover { color: var(--mint); }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, var(--moss) 0%, var(--forest) 100%);
+            color: var(--cream);
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--deep) 100%);
+            color: var(--cream);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo .gold-line { color: var(--gold); }
+        .footer-tagline { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+
+        .social-icons { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
+
+        .social-icon {
+            width: 38px; height: 38px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--cream);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .social-icon:hover {
+            background: var(--gold);
+            color: var(--deep);
+            transform: scale(1.1);
+            border-color: var(--gold);
+        }
+
+        .footer h5 { color: var(--cream); margin-bottom: 1.25rem; font-size: 1rem; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 0.5rem; }
+
+        .footer-links a {
+            color: rgba(245,240,232,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover { color: var(--mint); }
+        .footer-contact p { color: rgba(245,240,232,0.7); font-size: 0.9rem; margin-bottom: 0.4rem; }
+
+        .footer-copyright {
+            border-top: 1px solid rgba(245,240,232,0.1);
+            padding-top: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: rgba(245,240,232,0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            z-index: 9998;
+        }
+
+        .eco-toast {
+            background: white;
+            border-radius: var(--r);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem 1.25rem;
+            margin-top: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 280px;
+            max-width: 340px;
+            transform: translateX(110%);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eco-toast.show { transform: translateX(0); opacity: 1; }
+        .eco-toast-success { border-left: 4px solid var(--success); }
+        .eco-toast-error   { border-left: 4px solid var(--danger); }
+        .eco-toast-warning { border-left: 4px solid var(--warning); }
+        .eco-toast-info    { border-left: 4px solid var(--info); }
+
+        .eco-toast-progress {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px;
+            background: var(--gold);
+            animation: progressBar 3s linear forwards;
+        }
+
+        @keyframes progressBar {
+            from { width: 100%; }
+            to   { width: 0%; }
+        }
+
+        /* Translate btn */
+        .translate-btn {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.85rem;
+            border-color: rgba(255,255,255,0.35) !important;
+            color: var(--cream) !important;
+            transition: all 0.3s;
+        }
+
+        .translate-btn:hover {
+            background: rgba(255,255,255,0.15) !important;
+            color: var(--cream) !important;
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: rgba(10,26,15,0.97);
+                padding: 1rem;
+                border-radius: 0 0 1rem 1rem;
+                margin-top: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 3.5rem 0; }
+            .hero-subtitle { font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-transition" id="pageTransition"></div>
+
+    <div class="cursor" id="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <!-- ✅ FIX: navbar-expand-lg (was navbar-expand-sm) -->
+    <nav class="navbar navbar-expand-lg" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                🌿 Eco<span class="gold-line">_Life</span> Store
+            </a>
+
+            <!-- ✅ FIX: toggler now visible on dark bg via custom SVG icon in CSS -->
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" data-en="Home" data-ar="الرئيسية">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-en="Products" data-ar="المنتجات">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html" data-en="About" data-ar="حول">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html" data-en="Contact" data-ar="اتصل">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <a href="wishlist.html" class="btn btn-link text-white p-0" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                    <a href="cart.html" class="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light rounded-pill dropdown-toggle translate-btn"
+                            type="button" id="accountDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="accountBtnLabel">Account</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                            <li>
+                                <a class="dropdown-item" href="account.html" id="accountLink" style="display:none;">
+                                    <i class="fas fa-user me-2"></i>My Account
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="login.html" id="loginLink">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="register.html" id="registerLink">
+                                    <i class="fas fa-user-plus me-2"></i>Register
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider" id="logoutDivider" style="display:none;"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#"
+                                    id="logoutLink" style="display:none;" onclick="logout(event)">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn rounded-pill translate-btn" id="translateBtn">
+                        <i class="fas fa-language"></i>
+                        <span id="translateBtnText">EN</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <canvas class="hero-canvas" id="heroCanvas"></canvas>
+        <div class="floating-blob"></div>
+        <div class="floating-blob"></div>
+        <div class="floating-blob"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <div class="pulse"></div>
+                <span data-en="Premium Eco-Friendly Products" data-ar="منتجات صديقة للبيئة فاخرة">
+                    Premium Eco-Friendly Products
+                </span>
+            </div>
+            <h1 class="hero-title" id="heroTitle"
+                data-en="Sustainable Living Starts Here"
+                data-ar="الحياة المستدامة تبدأ هنا">
+                Sustainable Living Starts Here
+            </h1>
+            <p class="hero-subtitle"
+                data-en="Discover our curated collection of eco-friendly products that nurture both you and our planet."
+                data-ar="اكتشف مجموعتنا المختارة من المنتجات الصديقة للبيئة التي ترعى كلاً منك وكوكبنا.">
+                Discover our curated collection of eco-friendly products that nurture both you and our planet.
+            </p>
+            <a href="#products" class="btn-hero">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section categories" id="categories">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 data-en="Shop by Category" data-ar="تسوق حسب الفئة">Shop by Category</h2>
+                <p data-en="Explore our sustainable product categories" data-ar="استكشف فئات منتجاتنا المستدامة">
+                    Explore our sustainable product categories
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <i class="fas fa-home category-icon"></i>
+                        <h3 data-en="Home Products" data-ar="منتجات المنزل">Home Products</h3>
+                        <p data-en="Sustainable materials for your home" data-ar="منتجات منزلية مصنوعة من مواد مستدامة">
+                            Sustainable materials for your home
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <i class="fas fa-spa category-icon"></i>
+                        <h3 data-en="Personal Care" data-ar="العناية الشخصية">Personal Care</h3>
+                        <p data-en="Natural and cruelty-free personal care" data-ar="عناصر العناية الشخصية الطبيعية والخالية من القسوة">
+                            Natural and cruelty-free personal care
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <i class="fas fa-leaf category-icon"></i>
+                        <h3 data-en="Organic Food" data-ar="الغذاء العضوي">Organic Food</h3>
+                        <p data-en="Certified organic food for healthy living" data-ar="منتجات غذائية عضوية للحياة الصحية">
+                            Certified organic food for healthy living
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="section products" id="products">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 data-en="Featured Products" data-ar="المنتجات المميزة">Featured Products</h2>
+                <p data-en="Handpicked eco-friendly products for you" data-ar="منتجات صديقة للبيئة مختارة بعناية لك">
+                    Handpicked eco-friendly products for you
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-seedling text-white"></i>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Organic Cotton T-Shirt</h3>
+                            <p class="product-price">EGP 250</p>
+                            <div class="product-tags">
+                                <span class="product-tag">عضوي</span>
+                                <span class="product-tag">قابل لإعادة التدوير</span>
+                            </div>
+                            <button class="btn-add-cart" onclick="addToCart('Organic Cotton T-Shirt', 250)">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-wine-bottle text-white"></i>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Bamboo Water Bottle</h3>
+                            <p class="product-price">EGP 180</p>
+                            <div class="product-tags">
+                                <span class="product-tag">خالي من البلاستيك</span>
+                                <span class="product-tag">مستدام</span>
+                            </div>
+                            <button class="btn-add-cart" onclick="addToCart('Bamboo Water Bottle', 180)">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-soap text-white"></i>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Natural Soap Bar</h3>
+                            <p class="product-price">EGP 45</p>
+                            <div class="product-tags">
+                                <span class="product-tag">خالي من القسوة</span>
+                                <span class="product-tag">نباتي</span>
+                            </div>
+                            <button class="btn-add-cart" onclick="addToCart('Natural Soap Bar', 45)">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section stats" id="stats">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 data-en="Our Impact" data-ar="تأثيرنا">Our Impact</h2>
+                <p data-en="Numbers that speak for our commitment" data-ar="أرقام تتحدث عن التزامنا بالاستدامة">
+                    Numbers that speak for our commitment
+                </p>
+            </div>
+            <div class="row g-4">
+                <!-- ✅ FIX: data-target + data-suffix added, animated by statsCounter() -->
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-number" data-target="50000" data-suffix="+">0</div>
+                        <div class="stat-label" data-en="Happy Customers" data-ar="عملاء سعداء">Happy Customers</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                        <div class="stat-number" data-target="100000" data-suffix="+">0</div>
+                        <div class="stat-label" data-en="Trees Planted" data-ar="أشجار مزروعة">Trees Planted</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-recycle"></i></div>
+                        <div class="stat-number" data-target="250000" data-suffix="+">0</div>
+                        <div class="stat-label" data-en="Plastic Bottles Saved" data-ar="زجاجات بلاستيكية محفوظة">Plastic Bottles Saved</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-star"></i></div>
+                        <div class="stat-number" data-target="4.9" data-suffix="" data-decimal="1">0</div>
+                        <div class="stat-label" data-en="Average Rating" data-ar="متوسط التقييم">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="section newsletter">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2 class="mb-3" data-en="Join Our Community" data-ar="انضم إلى مجتمعنا">Join Our Community</h2>
+                    <p class="mb-4" data-en="Get exclusive offers and eco-tips in your inbox" data-ar="احصل على عروض حصرية ونصائح بيئية في بريدك الإلكتروني">
+                        Get exclusive offers and eco-tips in your inbox
+                    </p>
+                    <form id="newsletterForm">
+                        <input type="email" class="newsletter-input"
+                            placeholder="Enter your email address"
+                            data-en="Enter your email address"
+                            data-ar="أدخل عنوان بريدك الإلكتروني" required>
+                        <button type="submit" class="btn-hero w-100" data-en="Subscribe" data-ar="اشترك">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section testimonials">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 data-en="What Our Customers Say" data-ar="ماذا يقول عملاؤنا">What Our Customers Say</h2>
+                <p data-en="Real stories from our eco-conscious community" data-ar="قصص حقيقية من مجتمعنا الواعي بيئياً">
+                    Real stories from our eco-conscious community
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            Eco Life Store has transformed my daily routine. Their products are not only sustainable
+                            but also incredibly effective. I feel good about every purchase!
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div class="author-name">Sarah Ahmed</div>
+                                <div class="author-title">Eco Enthusiast</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            The quality and sustainability of their products are unmatched. I've switched my entire
+                            household to Eco Life Store items.
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div class="author-name">Mohamed Hassan</div>
+                                <div class="author-title">Family Man</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            Fast shipping, excellent customer service, and products that align with my values.
+                            What more could I ask for?
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div class="author-name">Fatima Omar</div>
+                                <div class="author-title">Business Owner</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog -->
+    <section class="section blog">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 data-en="Eco Living Tips" data-ar="نصائح الحياة البيئية">Eco Living Tips</h2>
+                <p data-en="Learn how to live more sustainably" data-ar="تعلم كيف تعيش بشكل أكثر استدامة">
+                    Learn how to live more sustainably
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="blog-card">
+                        <div class="blog-image"><i class="fas fa-seedling text-white"></i></div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">10 Ways to Reduce Plastic Waste</h3>
+                            <p class="blog-excerpt">Simple changes in your daily routine that can make a big impact on the environment.</p>
+                            <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="blog-card">
+                        <div class="blog-image"><i class="fas fa-home text-white"></i></div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">Sustainable Home Cleaning</h3>
+                            <p class="blog-excerpt">Natural alternatives to chemical cleaners that are safe for your family and the planet.</p>
+                            <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="blog-card">
+                        <div class="blog-image"><i class="fas fa-utensils text-white"></i></div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">Organic Cooking Basics</h3>
+                            <p class="blog-excerpt">Essential tips for cooking with organic ingredients and maintaining nutritional value.</p>
+                            <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section cta">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="mb-3" data-en="Ready to Make a Difference?" data-ar="جاهز لإحداث فرق؟">
+                        Ready to Make a Difference?
+                    </h2>
+                    <p class="mb-4" style="opacity:0.85;" data-en="Join thousands who chose sustainable living" data-ar="انضم إلى آلاف العملاء الذين اختاروا الحياة المستدامة">
+                        Join thousands who chose sustainable living
+                    </p>
+                    <a href="#products" class="btn-hero" data-en="Start Shopping Today" data-ar="ابدأ التسوق اليوم">
+                        Start Shopping Today
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-logo">🌿 Eco<span class="gold-line">_Life</span> Store</div>
+                    <p class="footer-tagline">Sustainable living for a better planet</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Shop</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">منتجات المنزل</a></li>
+                        <li><a href="#">العناية الشخصية</a></li>
+                        <li><a href="#">الغذاء العضوي</a></li>
+                        <li><a href="#">الأزياء المستدامة</a></li>
+                        <li><a href="#">الحديقة</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Help</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>Contact</h5>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt me-2"></i>Cairo, Egypt</p>
+                        <p><i class="fas fa-phone me-2"></i>+20 123 456 7890</p>
+                        <p><i class="fas fa-envelope me-2"></i>hello@ecolifestore.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2024 Eco Life Store. Made with 💚 for a better planet.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ✅ FIX: Scripts moved to end of body for performance -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+
+    <script>
+        // ✅ FIX: Register GSAP plugins before use
+        gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+        // Page Transition
+        gsap.to("#pageTransition", { y: "-100%", duration: 0.6, ease: "power2.out", delay: 0.1 });
+
+        // ─────────────────────────────────────────
+        // Custom Cursor (desktop only)
+        // ─────────────────────────────────────────
+        const cursor = document.getElementById('cursor');
+        if (window.matchMedia('(pointer: fine)').matches) {
+            cursor.style.display = 'block';
+            document.addEventListener('mousemove', (e) => {
+                gsap.to('.cursor-dot',  { x: e.clientX, y: e.clientY, duration: 0 });
+                gsap.to('.cursor-ring', { x: e.clientX, y: e.clientY, duration: 0.3, ease: "power2.out" });
+            });
+
+            document.querySelectorAll('a, button, .category-card, .product-card').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+            });
+        }
+
+        // ─────────────────────────────────────────
+        // Navbar scroll + active link
+        // ─────────────────────────────────────────
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // ✅ FIX: Set active nav link based on current page
+        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-link').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && (href === currentFile || (currentFile === '' && href === 'index.html'))) {
+                link.classList.add('active');
+            }
+        });
+
+        // ─────────────────────────────────────────
+        // Login UI — ✅ FIX: removed non-existent mobile element references
+        // ─────────────────────────────────────────
+        function updateLoginUI() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userName   = localStorage.getItem('userName') || 'Account';
+
+            const set = (id, show) => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = show ? 'block' : 'none';
+            };
+
+            set('accountLink',   isLoggedIn);
+            set('loginLink',    !isLoggedIn);
+            set('registerLink', !isLoggedIn);
+            set('logoutDivider', isLoggedIn);
+            set('logoutLink',    isLoggedIn);
+
+            const label = document.getElementById('accountBtnLabel');
+            if (label) label.textContent = isLoggedIn ? userName : 'Account';
+        }
+
+        function logout(event) {
+            event.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            updateLoginUI();
+            showToast('Logged out successfully', 'info');
+            setTimeout(() => window.location.href = 'login.html', 1200);
+        }
+
+        updateLoginUI();
+
+        // ─────────────────────────────────────────
+        // Cart (localStorage)
+        // ─────────────────────────────────────────
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '[]');
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const cart  = getCart();
+            const total = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartCount').textContent = total;
+        }
+
+        function addToCart(name, price) {
+            const cart     = getCart();
+            const existing = cart.find(i => i.name === name);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ name, price, qty: 1 });
+            }
+            saveCart(cart);
+            showToast(`"${name}" added to cart! 🛒`, 'success');
+        }
+
+        updateCartBadge();
+
+        // ─────────────────────────────────────────
+        // Hero Particle Canvas — ✅ FIX: resize handler added
+        // ─────────────────────────────────────────
+        const canvas = document.getElementById('heroCanvas');
+        const ctx    = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x  = Math.random() * canvas.width;
+                this.y  = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height)  this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(168,213,181,0.35)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const d  = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(168,213,181,${(1 - d / 100) * 0.4})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // ─────────────────────────────────────────
+        // Hero text animation (GSAP TextPlugin)
+        // ─────────────────────────────────────────
+        gsap.from("#heroTitle", {
+            duration: 1.5,
+            text: { value: "" },
+            ease: "none",
+            delay: 0.7
+        });
+
+        // ─────────────────────────────────────────
+        // Scroll Reveal
+        // ─────────────────────────────────────────
+        gsap.utils.toArray('.section').forEach(section => {
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top 82%",
+                onEnter: () => section.classList.add('revealed')
+            });
+        });
+
+        gsap.utils.toArray('.category-card, .product-card, .testimonial-card, .blog-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: { trigger: card, start: "top 85%" },
+                y: 30,
+                opacity: 0,
+                duration: 0.5,
+                delay: (i % 3) * 0.1
+            });
+        });
+
+        // ─────────────────────────────────────────
+        // ✅ FIX: Stats Counter Animation
+        // ─────────────────────────────────────────
+        function animateCounter(el) {
+            const target   = parseFloat(el.dataset.target);
+            const suffix   = el.dataset.suffix || '';
+            const decimals = parseInt(el.dataset.decimal || '0');
+            const duration = 2000;
+            const start    = performance.now();
+
+            function step(now) {
+                const elapsed  = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased    = 1 - Math.pow(1 - progress, 3);
+                const current  = target * eased;
+
+                el.textContent = (decimals > 0
+                    ? current.toFixed(decimals)
+                    : Math.floor(current).toLocaleString()) + suffix;
+
+                if (progress < 1) requestAnimationFrame(step);
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.stat-number[data-target]').forEach(el => {
+                        if (!el.dataset.animated) {
+                            el.dataset.animated = '1';
+                            animateCounter(el);
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const statsSection = document.getElementById('stats');
+        if (statsSection) statsObserver.observe(statsSection);
+
+        // ─────────────────────────────────────────
+        // Toast Notifications
+        // ─────────────────────────────────────────
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast     = document.createElement('div');
+            const icons     = { success: 'check-circle', error: 'times-circle', warning: 'exclamation-triangle', info: 'info-circle' };
+
+            toast.className = `eco-toast eco-toast-${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${icons[type] || 'info-circle'}" style="color:var(--${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'})"></i>
+                <span style="flex:1;font-size:0.9rem;">${message}</span>
+                <div class="eco-toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Thank you for subscribing! 🌿', 'success');
+            e.target.reset();
+        });
+
+        // ─────────────────────────────────────────
+        // ✅ FIX: Translation — uses data attributes safely, doesn't break icons
+        // ─────────────────────────────────────────
+        let currentLang = 'en';
+
+        function translatePage(lang) {
+            // Only translate leaf text nodes, skip elements with child elements
+            document.querySelectorAll('[data-en][data-ar]').forEach(el => {
+                const hasChildren = el.querySelector('*');
+                if (!hasChildren) {
+                    el.textContent = el.getAttribute(`data-${lang}`) || el.textContent;
+                }
+            });
+
+            document.getElementById('translateBtnText').textContent = lang === 'en' ? 'AR' : 'EN';
+            document.documentElement.lang = lang;
+            document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+            currentLang = lang;
+        }
+
+        document.getElementById('translateBtn').addEventListener('click', () => {
+            translatePage(currentLang === 'en' ? 'ar' : 'en');
+        });
+    </script>
+</body>
+</html>
