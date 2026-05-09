@@ -984,14 +984,42 @@
         });
         window.addEventListener('resize', () => { if (window.innerWidth > 768 && drawerOpen) toggleDrawer(false); });
 
-        // ─── Wishlist Data ───
-        let wishlistItems = [
-            { id: 1, name: 'Organic Cotton T-Shirt', category: 'Fashion', price: 49.99, oldPrice: 64.99, rating: 4.8, reviews: 128, icon: 'fas fa-shirt', badge: 'Sale' },
-            { id: 2, name: 'Bamboo Toothbrush Set', category: 'Personal Care', price: 19.99, oldPrice: null, rating: 4.9, reviews: 87, icon: 'fas fa-tooth', badge: 'Best Seller' },
-            { id: 3, name: 'Eco Water Bottle', category: 'Home', price: 34.99, oldPrice: 44.99, rating: 4.7, reviews: 213, icon: 'fas fa-bottle-water', badge: 'Sale' },
-        ];
+        // ─── Wishlist Data (from localStorage) ───
+        const WISHLIST_KEY = 'wishlist';
+
+        function readWishlist() {
+            try {
+                const raw = localStorage.getItem(WISHLIST_KEY);
+                const parsed = JSON.parse(raw || '[]');
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function writeWishlist(list) {
+            localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+        }
+
+        // Normalize to expected item shape across pages
+        function normalizeWishlistItems(list) {
+            return (Array.isArray(list) ? list : []).map(it => ({
+                id: it && it.id != null ? String(it.id) : String(Date.now()),
+                name: it && it.name ? String(it.name) : 'Item',
+                category: it && it.category ? String(it.category) : 'General',
+                price: Number(it && it.price != null ? it.price : 0),
+                oldPrice: it && it.oldPrice != null ? Number(it.oldPrice) : null,
+                rating: Number(it && it.rating != null ? it.rating : 4.5),
+                reviews: Number(it && it.reviews != null ? it.reviews : 0),
+                icon: it && it.icon ? String(it.icon) : 'fas fa-leaf',
+                badge: it && it.badge ? String(it.badge) : null,
+            })).filter(it => !Number.isNaN(it.price));
+        }
+
+        let wishlistItems = normalizeWishlistItems(readWishlist());
 
         // ─── Render ───
+
         function renderWishlist() {
             const grid = document.getElementById('wishlistGrid');
             const empty = document.getElementById('emptyState');
@@ -1037,7 +1065,7 @@
                             <span>${item.rating} (${item.reviews} reviews)</span>
                         </div>
                         <div class="card-price-row">
-                            <span class="card-price">$${item.price.toFixed(2)}</span>
+<span class="card-price">EGP ${item.price.toFixed(2)}</span>
                             ${item.oldPrice ? `<span class="card-price-old">$${item.oldPrice.toFixed(2)}</span>` : ''}
                             ${discount ? `<span class="card-discount">-${discount}%</span>` : ''}
                         </div>
@@ -1066,12 +1094,14 @@
             gsap.to(card, {
                 opacity: 0, scale: 0.85, duration: 0.3, ease: "power2.in",
                 onComplete: () => {
-                    wishlistItems = wishlistItems.filter(i => i.id !== id);
+                    wishlistItems = wishlistItems.filter(i => String(i.id) !== String(id));
+                    writeWishlist(wishlistItems);
                     renderWishlist();
                     showToast('Removed from wishlist', 'error');
                 }
             });
         }
+
 
         function addToCart(id, btn) {
             btn.classList.add('added');
@@ -1086,6 +1116,39 @@
         }
 
         function addAllToCart() {
+            // Add all wishlist items into localStorage.cart
+            const CART_KEY = 'cart';
+
+            let cart = [];
+            try {
+                const raw = localStorage.getItem(CART_KEY);
+                const parsed = JSON.parse(raw || '[]');
+                cart = Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                cart = [];
+            }
+
+            const existing = new Map(cart.map((it, idx) => [String(it.id ?? idx), it]));
+
+            wishlistItems.forEach(w => {
+                const key = String(w.id);
+                if (existing.has(key)) {
+                    // Increase qty if already in cart
+                    const item = existing.get(key);
+                    item.qty = Math.max(1, Math.min(10, (Number(item.qty) || 1) + 1));
+                } else {
+                    cart.push({
+                        id: String(w.id),
+                        name: w.name,
+                        price: Number(w.price) || 0,
+                        qty: 1
+                    });
+                }
+            });
+
+            cart = cart.filter(it => it && Number(it.price) >= 0 && Number.isFinite(Number(it.price)));
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
             document.querySelectorAll('.btn-add-cart').forEach(btn => {
                 if (!btn.disabled) {
                     btn.classList.add('added');
@@ -1093,7 +1156,10 @@
                     btn.disabled = true;
                 }
             });
-            showToast(`${wishlistItems.length} items added to cart!`, 'success');
+
+            const addedCount = wishlistItems.length;
+            showToast(`${addedCount} items added to cart!`, 'success');
+
             setTimeout(() => {
                 document.querySelectorAll('.btn-add-cart').forEach(btn => {
                     btn.classList.remove('added');
@@ -1103,16 +1169,19 @@
             }, 2000);
         }
 
+
         function clearWishlist() {
             gsap.to('.wishlist-card', {
                 opacity: 0, y: -20, stagger: 0.05, duration: 0.3,
                 onComplete: () => {
                     wishlistItems = [];
+                    writeWishlist(wishlistItems);
                     renderWishlist();
                     showToast('Wishlist cleared', 'error');
                 }
             });
         }
+
 
         function viewProduct(id) {
             window.location.href = `product-detail.html?id=${id}`;
