@@ -1053,11 +1053,6 @@
                 <a href="wishlist.html" class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
                     <i class="fas fa-heart"></i>
                 </a>
-                <a href="cart.html" class="cart-btn" aria-label="Shopping cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Cart</span>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </a>
                 <!-- Hamburger -->
                 <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"
                     aria-controls="mobileDrawer">
@@ -1164,15 +1159,7 @@
                 <!-- Divider -->
                 <div class="divider">Or continue with</div>
 
-                <!-- Social -->
-                <div class="social-login">
-                    <a href="#google" class="social-btn">
-                        <i class="fab fa-google"></i> Google
-                    </a>
-                    <a href="#facebook" class="social-btn">
-                        <i class="fab fa-facebook"></i> Facebook
-                    </a>
-                </div>
+
 
                 <div class="login-footer">
                     Don't have an account? <a href="register.html">Sign up here</a>
@@ -1190,6 +1177,111 @@
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script>
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION A: SHARED HELPERS - Used in ALL pages
+        // ═══════════════════════════════════════════════════════════════
+
+        // Cart Management
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '[]');
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateAllBadges();
+        }
+
+        function addItemToCart(item) {
+            const cart = getCart();
+            const existing = cart.find(i => i.id === item.id);
+            if (existing) {
+                existing.qty += item.qty || 1;
+            } else {
+                cart.push(item);
+            }
+            saveCart(cart);
+        }
+
+        function removeItemFromCart(itemId) {
+            const cart = getCart().filter(i => i.id !== itemId);
+            saveCart(cart);
+        }
+
+        function clearCart() {
+            localStorage.setItem('cart', '[]');
+            updateAllBadges();
+        }
+
+        // Wishlist Management
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem('wishlist') || '[]');
+        }
+
+        function saveWishlist(wishlist) {
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateAllBadges();
+        }
+
+        function isInWishlist(itemId) {
+            return getWishlist().some(i => i.id === itemId);
+        }
+
+        function toggleWishlistItem(item) {
+            const wishlist = getWishlist();
+            const index = wishlist.findIndex(i => i.id === item.id);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                wishlist.push(item);
+            }
+            saveWishlist(wishlist);
+            return index === -1;
+        }
+
+        // Badge Update
+        function updateAllBadges() {
+            const cartCount = getCart().reduce((sum, item) => sum + (item.qty || 1), 0);
+            document.querySelectorAll('#cartBadge, #cartBadgeNav, #cartCount, .cart-badge, .cart-badge-nav').forEach(el => {
+                if (el) el.textContent = cartCount;
+            });
+
+            const wishlistCount = getWishlist().length;
+            document.querySelectorAll('#wishlistBadge, .wishlist-badge').forEach(el => {
+                if (el) el.textContent = wishlistCount;
+            });
+        }
+
+        // Slugify Helper
+        function slugify(str) {
+            return str.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+        }
+
+        // Auth Check
+        function isLoggedIn() {
+            return localStorage.getItem('isLoggedIn') === 'true';
+        }
+
+        // Initialize badges on page load
+        document.addEventListener('DOMContentLoaded', updateAllBadges);
+
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION D: LOGIN PAGE LOGIC
+        // ═══════════════════════════════════════════════════════════════
+
+        // D2: Redirect if already logged in (at start of script)
+        if (isLoggedIn()) {
+            window.location.href = 'account.html';
+        }
+
+        // D4: Pre-fill email if rememberedEmail exists
+        window.addEventListener('DOMContentLoaded', () => {
+            const emailInput = document.getElementById('email');
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail && emailInput) {
+                emailInput.value = rememberedEmail;
+            }
+        });
+
         // ─── Page Transition ───
         gsap.to("#pageTransition", {
             y: "-100%", duration: 0.7, ease: "power3.out", delay: 0.05,
@@ -1232,6 +1324,15 @@
         // Close on resize to desktop
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && drawerOpen) toggleDrawer(false);
+        });
+
+        // SECTION B4: Set active nav link based on current page
+        const currentFile = window.location.pathname.split('/').pop() || 'login.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && (href === currentFile || (currentFile === '' && href === 'index.html'))) {
+                link.classList.add('active');
+            }
         });
 
         // ─── Password Toggle ───
@@ -1332,6 +1433,7 @@
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
             let valid = true;
 
             // Validate email
@@ -1361,17 +1463,37 @@
             loginBtn.classList.add('loading');
             loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Signing in…</span>';
 
-            // Simulate async login
+            // D1: Real localStorage auth check
             setTimeout(() => {
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('rememberMe', document.getElementById('rememberMe').checked);
-                localStorage.setItem('isLoggedIn', 'true');
+                const storedEmail = localStorage.getItem('userEmail');
+                const storedPassword = localStorage.getItem('userPassword');
 
-                loginBtn.innerHTML = '<i class="fas fa-check"></i> <span>Success!</span>';
-                loginBtn.style.background = 'linear-gradient(135deg, var(--success), #16a34a)';
+                if (!storedEmail || !storedPassword) {
+                    loginBtn.classList.remove('loading');
+                    loginBtn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
+                    showToast('No account found. Please register first.', 'error');
+                    return;
+                }
 
-                showToast('Login successful! Redirecting…', 'success');
-                setTimeout(() => { window.location.href = 'account.html'; }, 1200);
+                if (email === storedEmail && password === storedPassword) {
+                    // D3: Save rememberedEmail if Remember Me is checked
+                    if (rememberMe) {
+                        localStorage.setItem('rememberedEmail', email);
+                    } else {
+                        localStorage.removeItem('rememberedEmail');
+                    }
+
+                    localStorage.setItem('isLoggedIn', 'true');
+                    loginBtn.innerHTML = '<i class="fas fa-check"></i> <span>Success!</span>';
+                    loginBtn.style.background = 'linear-gradient(135deg, var(--success), #16a34a)';
+                    showToast('Login successful! Redirecting…', 'success');
+                    setTimeout(() => { window.location.href = 'account.html'; }, 1200);
+                } else {
+                    loginBtn.classList.remove('loading');
+                    loginBtn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
+                    showToast('Invalid email or password.', 'error');
+                    gsap.to('#loginWrapper', { x: [-8, 8, -6, 6, -4, 4, 0], duration: 0.4, ease: "power2.out" });
+                }
             }, 1200);
         });
 

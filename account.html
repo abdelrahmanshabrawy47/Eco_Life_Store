@@ -1821,14 +1821,100 @@
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script>
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION A: SHARED HELPERS - Used in ALL pages
+        // ═══════════════════════════════════════════════════════════════
+
+        // Cart Management
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '[]');
+        }
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateAllBadges();
+        }
+        function addItemToCart(item) {
+            const cart = getCart();
+            const existing = cart.find(i => i.id === item.id);
+            if (existing) {
+                existing.qty += item.qty || 1;
+            } else {
+                cart.push(item);
+            }
+            saveCart(cart);
+        }
+        function removeItemFromCart(itemId) {
+            const cart = getCart().filter(i => i.id !== itemId);
+            saveCart(cart);
+        }
+        function clearCart() {
+            localStorage.setItem('cart', '[]');
+            updateAllBadges();
+        }
+
+        // Wishlist Management
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem('wishlist') || '[]');
+        }
+        function saveWishlist(wishlist) {
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateAllBadges();
+        }
+        function isInWishlist(itemId) {
+            return getWishlist().some(i => i.id === itemId);
+        }
+        function toggleWishlistItem(item) {
+            const wishlist = getWishlist();
+            const index = wishlist.findIndex(i => i.id === item.id);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                wishlist.push(item);
+            }
+            saveWishlist(wishlist);
+            return index === -1;
+        }
+
+        // Badge Update
+        function updateAllBadges() {
+            const cartCount = getCart().reduce((sum, item) => sum + (item.qty || 1), 0);
+            document.querySelectorAll('#cartBadge, #cartBadgeNav, #cartCount, .cart-badge, .cart-badge-nav').forEach(el => {
+                if (el) el.textContent = cartCount;
+            });
+
+            const wishlistCount = getWishlist().length;
+            document.querySelectorAll('#wishlistBadge, .wishlist-badge').forEach(el => {
+                if (el) el.textContent = wishlistCount;
+            });
+        }
+
+        // Slugify Helper
+        function slugify(str) {
+            return str.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+        }
+
+        // Auth Check
+        function isLoggedIn() {
+            return localStorage.getItem('isLoggedIn') === 'true';
+        }
+
+        // Initialize badges on page load
+        document.addEventListener('DOMContentLoaded', updateAllBadges);
+
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION K: ACCOUNT PAGE LOGIC
+        // ═══════════════════════════════════════════════════════════════
+
+        // K2: Auth check - redirect if not logged in
+        if (!isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
         // ─── Page Transition ───
         gsap.to("#pageTransition", {
             y: "-100%", duration: 0.7, ease: "power3.out", delay: 0.05,
             onComplete: () => document.getElementById('pageTransition').style.display = 'none'
         });
-
-        // ─── Auth Guard ───
-        if (!localStorage.getItem('isLoggedIn')) window.location.href = 'login.html';
 
         // ─── Load User Data ───
         function loadProfileData() {
@@ -1845,7 +1931,15 @@
             document.getElementById('overviewEmail').textContent = email;
             document.getElementById('overviewPhone').textContent = phone || '—';
             document.getElementById('overviewLocation').textContent = (city && country) ? `${city}, ${country}` : (city || country || '—');
-            document.getElementById('memberSince').textContent = new Date().getFullYear();
+
+            // K3: Show memberSince from userRegisteredAt
+            const registeredAt = localStorage.getItem('userRegisteredAt');
+            if (registeredAt) {
+                const date = new Date(registeredAt);
+                document.getElementById('memberSince').textContent = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            } else {
+                document.getElementById('memberSince').textContent = new Date().getFullYear();
+            }
 
             // Fill edit form
             document.getElementById('editFirstName').value = nameParts[0] || '';
@@ -1854,17 +1948,13 @@
             document.getElementById('editPhone').value = phone;
             document.getElementById('editCity').value = city;
             document.getElementById('editCountry').value = country;
-            document.getElementById('editBio').value = localStorage.getItem('userBio') || '';
 
-            // Restore avatar
-            const savedAvatar = localStorage.getItem('userAvatar');
-            if (savedAvatar) {
-                const avatar = document.getElementById('userAvatar');
-                avatar.innerHTML = `<img src="${savedAvatar}" alt="avatar">`;
+            // Load avatar
+            const avatar = localStorage.getItem('userAvatar');
+            if (avatar) {
+                document.getElementById('userAvatar').innerHTML = `<img src="${avatar}" alt="avatar">`;
             }
         }
-
-        loadProfileData();
 
         // ─── Hamburger / Mobile Drawer ───
         const hamburger = document.getElementById('hamburger');
@@ -1881,11 +1971,28 @@
         }
 
         hamburger.addEventListener('click', () => toggleDrawer());
-        drawer.querySelectorAll('a').forEach(l => l.addEventListener('click', () => toggleDrawer(false)));
-        document.addEventListener('click', (e) => {
-            if (drawerOpen && !drawer.contains(e.target) && !hamburger.contains(e.target)) toggleDrawer(false);
+        drawer.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => toggleDrawer(false));
         });
-        window.addEventListener('resize', () => { if (window.innerWidth > 768 && drawerOpen) toggleDrawer(false); });
+
+        document.addEventListener('click', (e) => {
+            if (drawerOpen && !drawer.contains(e.target) && !hamburger.contains(e.target)) {
+                toggleDrawer(false);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && drawerOpen) toggleDrawer(false);
+        });
+
+        // SECTION B4: Set active nav link based on current page
+        const currentFile = window.location.pathname.split('/').pop() || 'account.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && (href === currentFile || (currentFile === '' && href === 'index.html'))) {
+                link.classList.add('active');
+            }
+        });
 
         // ─── Sidebar Navigation ───
         function switchSection(id) {
@@ -2044,9 +2151,20 @@
 
         // ─── Logout ───
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            ['isLoggedIn', 'userEmail', 'userName', 'userPhone', 'userCity', 'userCountry', 'userBio', 'userAvatar']
-                .forEach(k => localStorage.removeItem(k));
-            window.location.href = 'index.html';
+            // K1: Logout clears user keys but keeps cart/wishlist
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userPassword');
+            localStorage.removeItem('userRegisteredAt');
+            localStorage.removeItem('userPhone');
+            localStorage.removeItem('userCity');
+            localStorage.removeItem('userCountry');
+            localStorage.removeItem('userBio');
+            localStorage.removeItem('userAvatar');
+            // Cart and wishlist are preserved
+            showToast('Logged out successfully!', 'success');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
         });
 
         // ─── Toast ───

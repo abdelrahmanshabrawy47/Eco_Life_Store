@@ -1633,6 +1633,95 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION A: SHARED HELPERS - Used in ALL pages
+        // ═══════════════════════════════════════════════════════════════
+
+        // Cart Management
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '[]');
+        }
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateAllBadges();
+        }
+        function addItemToCart(item) {
+            const cart = getCart();
+            const existing = cart.find(i => i.id === item.id);
+            if (existing) {
+                existing.qty += item.qty || 1;
+            } else {
+                cart.push(item);
+            }
+            saveCart(cart);
+        }
+        function removeItemFromCart(itemId) {
+            const cart = getCart().filter(i => i.id !== itemId);
+            saveCart(cart);
+        }
+        function clearCart() {
+            localStorage.setItem('cart', '[]');
+            updateAllBadges();
+        }
+
+        // Wishlist Management
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem('wishlist') || '[]');
+        }
+        function saveWishlist(wishlist) {
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateAllBadges();
+        }
+        function isInWishlist(itemId) {
+            return getWishlist().some(i => i.id === itemId);
+        }
+        function toggleWishlistItem(item) {
+            const wishlist = getWishlist();
+            const index = wishlist.findIndex(i => i.id === item.id);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                wishlist.push(item);
+            }
+            saveWishlist(wishlist);
+            return index === -1;
+        }
+
+        // Badge Update
+        function updateAllBadges() {
+            const cartCount = getCart().reduce((sum, item) => sum + (item.qty || 1), 0);
+            document.querySelectorAll('#cartBadge, #cartBadgeNav, #cartCount, .cart-badge, .cart-badge-nav').forEach(el => {
+                if (el) el.textContent = cartCount;
+            });
+
+            const wishlistCount = getWishlist().length;
+            document.querySelectorAll('#wishlistBadge, .wishlist-badge').forEach(el => {
+                if (el) el.textContent = wishlistCount;
+            });
+        }
+
+        // Slugify Helper
+        function slugify(str) {
+            return str.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+        }
+
+        // Auth Check
+        function isLoggedIn() {
+            return localStorage.getItem('isLoggedIn') === 'true';
+        }
+
+        // Initialize badges on page load
+        document.addEventListener('DOMContentLoaded', updateAllBadges);
+
+        // ═══════════════════════════════════════════════════════════════
+        // SECTION L: ADMIN PAGE LOGIC
+        // ═══════════════════════════════════════════════════════════════
+
+        // L1: Redirect if not logged in
+        if (!isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
         // Page Transition
         gsap.set("#pageTransition", { y: 0 });
         gsap.to("#pageTransition", { y: "-100%", duration: 0.6, ease: "power2.out", delay: 0.1 });

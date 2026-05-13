@@ -1847,27 +1847,122 @@
         });
         document.addEventListener('click', () => accDropdown.classList.remove('open'));
 
-        // ─── Cart State ───
-        const cartItems = {
-            1: { price: 250, qty: 1, active: true },
-            2: { price: 95, qty: 2, active: true },
-            3: { price: 120, qty: 1, active: true }
-        };
+        // ─── Cart State (from localStorage) ───
+        const STORAGE_KEY = 'cart';
+
+        // localStorage.cart is an array of { name, price, qty }
+        function readCart() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                const parsed = JSON.parse(raw || '[]');
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function writeCart(cart) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+        }
+
+        // Keep only basic fields in memory to avoid breaking calculations.
+        let cartItems = readCart().map(it => ({
+            name: it && it.name ? String(it.name) : 'Item',
+            price: Number(it && it.price ? it.price : 0),
+            qty: Math.max(1, Math.min(10, parseInt(it && it.qty ? it.qty : 1, 10) || 1))
+        }));
+
         let promoDiscount = 0;
         const SHIPPING = 50;
         const TAX_RATE = 0.07;
 
         function getSubtotal() {
-            return Object.values(cartItems).filter(i => i.active).reduce((s, i) => s + i.price * i.qty, 0);
+            return cartItems.reduce((s, i) => s + i.price * i.qty, 0);
         }
         function getActiveCount() {
-            return Object.values(cartItems).filter(i => i.active).length;
+            return cartItems.length;
         }
         function getTotalItems() {
-            return Object.values(cartItems).filter(i => i.active).reduce((s, i) => s + i.qty, 0);
+            return cartItems.reduce((s, i) => s + i.qty, 0);
         }
 
         function recalculate(animate = true) {
+            // Normalize in-memory cart items and sync back to localStorage.
+            if (!Array.isArray(cartItems)) cartItems = [];
+            cartItems = cartItems.map(it => ({
+                name: it && it.name ? String(it.name) : 'Item',
+                price: Number(it && it.price ? it.price : 0),
+                qty: Math.max(1, Math.min(10, parseInt(it && it.qty ? it.qty : 1, 10) || 1))
+            }));
+            cartItems = cartItems.filter(it => it.price >= 0);
+            writeCart(cartItems);
+
+            // Render cart items dynamically (no more item-1..item-3 placeholders).
+            // We re-build the cart item DOM inside #cartPanel.
+            const cartPanel = document.getElementById('cartPanel');
+            if (!cartPanel) return;
+
+            const existingItems = Array.from(cartPanel.querySelectorAll('.cart-item'));
+            existingItems.forEach(el => el.remove());
+
+            const frag = document.createDocumentFragment();
+
+            cartItems.forEach((item, idx) => {
+                const domId = idx + 1;
+                const safeId = `cart-${domId}`;
+
+                // Demo visuals: keep existing CSS structure, but populate name/price/qty from localStorage.
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-item';
+                itemEl.id = safeId;
+                itemEl.setAttribute('data-item', String(domId));
+
+                itemEl.innerHTML = `
+                    <div class="cart-item-inner">
+                        <div class="item-img" style="background:linear-gradient(135deg,#a8d5b5,#7bbf8a);">🌿</div>
+                        <div class="item-body">
+                            <div class="item-name">${item.name ? String(item.name) : 'Item'}</div>
+                            <div class="item-meta">Sustainable Product</div>
+                            <div class="item-badge"><i class="fas fa-leaf"></i> Eco Choice</div>
+                            <div class="item-price-row">
+                                <span class="item-price">EGP ${Number(item.price).toLocaleString()}</span>
+                            </div>
+                            <div class="qty-row">
+                                <button class="qty-btn" data-action="decrease" data-item="${domId}">−</button>
+                                <input type="number" class="qty-input" id="qty-${domId}" value="${item.qty}" min="1" max="10" data-item="${domId}">
+                                <button class="qty-btn" data-action="increase" data-item="${domId}">+</button>
+                                <span class="item-subtotal" id="sub-${domId}">= EGP ${(Number(item.price) * Number(item.qty)).toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <span class="item-total" id="total-${domId}">EGP ${(Number(item.price) * Number(item.qty)).toLocaleString()}</span>
+                            <div class="action-btns">
+                                <button class="wishlist-btn" data-item="${domId}" title="Save for later"><i class="fas fa-heart"></i></button>
+                                <button class="remove-btn" data-item="${domId}" title="Remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                frag.appendChild(itemEl);
+            });
+
+            // Insert before empty-cart so that empty-cart stays last.
+            const emptyCart = document.getElementById('emptyCart');
+            if (emptyCart) cartPanel.insertBefore(frag, emptyCart);
+            else cartPanel.appendChild(frag);
+
+            // Ensure totals row numbers are correct.
+            recalculateItemTotalsOnly();
+
+            function recalculateItemTotalsOnly() {
+                cartItems.forEach((it, idx) => {
+                    const domId = idx + 1;
+                    updateItemTotal(domId);
+                });
+            }
+
+
             const sub = getSubtotal();
             const count = getActiveCount();
             const ship = count > 0 ? SHIPPING : 0;
@@ -1905,25 +2000,27 @@
             document.getElementById('itemCountLabel').textContent = `(${getTotalItems()} items)`;
 
             // Empty state
-            if (count === 0) {
-                document.getElementById('emptyCart').classList.add('show');
-                document.getElementById('clearCartBtn').style.display = 'none';
-                document.getElementById('summaryPanel').style.opacity = '.5';
-                document.getElementById('summaryPanel').style.pointerEvents = 'none';
-            } else {
-                document.getElementById('emptyCart').classList.remove('show');
-                document.getElementById('clearCartBtn').style.display = '';
-                document.getElementById('summaryPanel').style.opacity = '';
-                document.getElementById('summaryPanel').style.pointerEvents = '';
-            }
+            const empty = count === 0;
+            document.getElementById('emptyCart').classList.toggle('show', empty);
+            document.getElementById('clearCartBtn').style.display = empty ? 'none' : '';
+            document.getElementById('summaryPanel').style.opacity = empty ? '.5' : '';
+            document.getElementById('summaryPanel').style.pointerEvents = empty ? 'none' : '';
+
+            // Update mobile drawer cart count
+            const mobileCart = document.querySelector('.drawer-cart-btn');
+            if (mobileCart) mobileCart.innerHTML = `<i class="fas fa-shopping-cart"></i>Cart (${badge})`;
+
+            // Ensure displayed DOM items match current cart size
+            // (no-op here; recalculate() already hides/shows item-1..item-3)
         }
 
-        function updateItemTotal(id) {
-            const item = cartItems[id];
+        function updateItemTotal(domId) {
+            const idx = parseInt(domId, 10) - 1;
+            const item = cartItems[idx];
             if (!item) return;
             const sub = item.price * item.qty;
-            const subEl = document.getElementById('sub-' + id);
-            const totEl = document.getElementById('total-' + id);
+            const subEl = document.getElementById('sub-' + domId);
+            const totEl = document.getElementById('total-' + domId);
             if (subEl) subEl.textContent = '= EGP ' + sub.toLocaleString();
             if (totEl) {
                 totEl.textContent = 'EGP ' + sub.toLocaleString();
@@ -1931,57 +2028,83 @@
             }
         }
 
-        // ─── Quantity Buttons ───
-        document.querySelectorAll('.qty-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const action = this.getAttribute('data-action');
-                const id = this.getAttribute('data-item');
+        // ─── Quantity Buttons / Remove Item (event delegation) ───
+        document.getElementById('cartPanel').addEventListener('click', (e) => {
+            const qtyBtn = e.target.closest('.qty-btn');
+            if (qtyBtn) {
+                const action = qtyBtn.getAttribute('data-action');
+                const id = qtyBtn.getAttribute('data-item');
                 const input = document.getElementById('qty-' + id);
-                let qty = parseInt(input.value);
+                if (!input) return;
 
+                let qty = parseInt(input.value);
                 if (action === 'increase' && qty < 10) qty++;
                 else if (action === 'decrease' && qty > 1) qty--;
-                else { gsap.fromTo(input, { x: -4 }, { x: 0, duration: .3, ease: "elastic.out(1,.3)" }); return; }
+                else {
+                    gsap.fromTo(input, { x: -4 }, { x: 0, duration: .3, ease: "elastic.out(1,.3)" });
+                    return;
+                }
 
                 input.value = qty;
-                cartItems[id].qty = qty;
-                document.getElementById('item-' + id).setAttribute('data-qty', qty);
+                const idx = parseInt(id, 10) - 1;
+                if (cartItems[idx]) {
+                    cartItems[idx].qty = qty;
+                    writeCart(cartItems);
+                }
+
                 updateItemTotal(id);
                 recalculate();
-                gsap.fromTo(btn, { scale: .85 }, { scale: 1, duration: .25, ease: "back.out(2)" });
-            });
+                gsap.fromTo(qtyBtn, { scale: .85 }, { scale: 1, duration: .25, ease: "back.out(2)" });
+                return;
+            }
+
+            const removeBtn = e.target.closest('.remove-btn');
+            if (removeBtn) {
+                const id = removeBtn.getAttribute('data-item');
+                const idx = parseInt(id, 10) - 1;
+                if (!Number.isFinite(idx) || !cartItems[idx]) return;
+
+                const itemEl = document.querySelector(`#cart-${id}`) || document.getElementById('item-' + id);
+                if (itemEl) {
+                    gsap.to(itemEl, {
+                        opacity: 0, x: 30, height: 0, paddingTop: 0, paddingBottom: 0,
+                        duration: .4, ease: "power2.in",
+                        onComplete: () => {
+                            cartItems.splice(idx, 1);
+                            writeCart(cartItems);
+                            recalculate();
+                            showToast('Item removed from cart', 'info');
+                        }
+                    });
+                } else {
+                    cartItems.splice(idx, 1);
+                    writeCart(cartItems);
+                    recalculate();
+                    showToast('Item removed from cart', 'info');
+                }
+            }
         });
 
-        document.querySelectorAll('.qty-input').forEach(input => {
-            input.addEventListener('change', function () {
-                const id = this.getAttribute('data-item');
-                let qty = parseInt(this.value);
-                if (isNaN(qty) || qty < 1) qty = 1;
-                if (qty > 10) qty = 10;
-                this.value = qty;
-                cartItems[id].qty = qty;
-                updateItemTotal(id);
-                recalculate();
-            });
+        document.getElementById('cartPanel').addEventListener('change', (e) => {
+            const input = e.target.closest('.qty-input');
+            if (!input) return;
+
+            const id = input.getAttribute('data-item');
+            let qty = parseInt(input.value);
+            if (isNaN(qty) || qty < 1) qty = 1;
+            if (qty > 10) qty = 10;
+            input.value = qty;
+
+            const idx = parseInt(id, 10) - 1;
+            if (cartItems[idx]) {
+                cartItems[idx].qty = qty;
+                writeCart(cartItems);
+            }
+
+            updateItemTotal(id);
+            recalculate();
         });
 
-        // ─── Remove Item ───
-        document.querySelectorAll('.remove-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const id = this.getAttribute('data-item');
-                const item = document.getElementById('item-' + id);
-                gsap.to(item, {
-                    opacity: 0, x: 30, height: 0, paddingTop: 0, paddingBottom: 0,
-                    duration: .4, ease: "power2.in",
-                    onComplete: () => {
-                        item.style.display = 'none';
-                        cartItems[id].active = false;
-                        recalculate();
-                        showToast('Item removed from cart', 'info');
-                    }
-                });
-            });
-        });
 
         // ─── Save / Wishlist ───
         document.querySelectorAll('.wishlist-btn').forEach(btn => {
@@ -2001,9 +2124,9 @@
                 onComplete: () => {
                     items.forEach(item => {
                         item.style.display = 'none';
-                        const id = item.id.replace('item-', '');
-                        if (cartItems[id]) cartItems[id].active = false;
                     });
+                    cartItems = [];
+                    writeCart(cartItems);
                     recalculate();
                     showToast('Cart cleared', 'info');
                 }

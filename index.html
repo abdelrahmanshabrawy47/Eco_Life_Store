@@ -7,7 +7,9 @@
     <title>Eco Life Store - Premium Eco-Friendly E-Commerce</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- ✅ FIX: GSAP scripts moved to end of body — loading in <head> can block rendering -->
@@ -33,16 +35,20 @@
             --r: 0.75rem;
             --r2: 1.5rem;
             --r3: 2rem;
-            --shadow-sm: 0 4px 16px rgba(26,58,42,.10);
-            --shadow-md: 0 8px 32px rgba(26,58,42,.14);
-            --shadow-lg: 0 20px 60px rgba(26,58,42,.18);
-            --shadow-xl: 0 32px 80px rgba(26,58,42,.22);
-            --glass-bg: rgba(255,255,255,0.07);
-            --glass-border: rgba(255,255,255,0.12);
+            --shadow-sm: 0 4px 16px rgba(26, 58, 42, .10);
+            --shadow-md: 0 8px 32px rgba(26, 58, 42, .14);
+            --shadow-lg: 0 20px 60px rgba(26, 58, 42, .18);
+            --shadow-xl: 0 32px 80px rgba(26, 58, 42, .22);
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.12);
             --glass-blur: blur(20px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -51,7 +57,12 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
         }
@@ -91,14 +102,16 @@
             height: 52px;
             top: -26px;
             left: -26px;
-            background: rgba(78,140,98,0.2);
+            background: rgba(78, 140, 98, 0.2);
         }
 
         /* Page Transition */
         .page-transition {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: var(--deep);
             z-index: 10000;
         }
@@ -106,7 +119,8 @@
         /* ✅ FIX: navbar-expand-lg instead of navbar-expand-sm */
         .navbar {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             z-index: 1000;
             transition: all 0.3s ease;
@@ -115,10 +129,10 @@
         }
 
         .navbar.scrolled {
-            background: rgba(10,26,15,0.92);
+            background: rgba(10, 26, 15, 0.92);
             backdrop-filter: blur(24px);
             padding: 0.5rem 0;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
         }
 
         .navbar-brand {
@@ -129,11 +143,13 @@
             text-decoration: none;
         }
 
-        .navbar-brand .gold-line { color: var(--gold); }
+        .navbar-brand .gold-line {
+            color: var(--gold);
+        }
 
         /* ✅ FIX: Custom toggler icon for dark navbar */
         .navbar-toggler {
-            border-color: rgba(255,255,255,0.4) !important;
+            border-color: rgba(255, 255, 255, 0.4) !important;
             padding: 0.4rem 0.6rem;
         }
 
@@ -142,7 +158,7 @@
         }
 
         .nav-link {
-            color: rgba(245,240,232,0.85) !important;
+            color: rgba(245, 240, 232, 0.85) !important;
             font-weight: 500;
             position: relative;
             transition: all 0.3s ease;
@@ -188,17 +204,19 @@
         }
 
         .cart-btn:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             color: var(--cream) !important;
         }
 
         .cart-badge {
             position: absolute;
-            top: -8px; right: -8px;
+            top: -8px;
+            right: -8px;
             background: var(--gold);
             color: var(--deep);
             border-radius: 50%;
-            width: 20px; height: 20px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -219,25 +237,54 @@
 
         .hero-canvas {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .floating-blob {
             position: absolute;
             border-radius: 50%;
-            background: rgba(168,213,181,0.1);
+            background: rgba(168, 213, 181, 0.1);
             filter: blur(40px);
             animation: float 6s ease-in-out infinite;
         }
 
-        .floating-blob:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 10%; animation-delay: 0s; }
-        .floating-blob:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 15%; animation-delay: 2s; }
-        .floating-blob:nth-child(3) { width: 150px; height: 150px; bottom: 20%; left: 20%; animation-delay: 4s; }
+        .floating-blob:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-blob:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-blob:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
         }
 
         .hero-content {
@@ -252,8 +299,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             padding: 0.5rem 1rem;
             margin-bottom: 2rem;
@@ -262,7 +309,8 @@
         }
 
         .hero-badge .pulse {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             background: var(--gold);
             border-radius: 50%;
             animation: pulse 2s infinite;
@@ -270,8 +318,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.85); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.85);
+            }
         }
 
         .hero-title {
@@ -310,7 +367,7 @@
             background: var(--mint);
             transform: translateY(-3px);
             color: var(--deep);
-            box-shadow: 0 10px 30px rgba(123,191,138,0.4);
+            box-shadow: 0 10px 30px rgba(123, 191, 138, 0.4);
         }
 
         /* Sections */
@@ -326,12 +383,24 @@
             transform: translateY(0);
         }
 
-        .section-header { margin-bottom: 3.5rem; }
-        .section-header h2 { margin-bottom: 0.75rem; font-size: clamp(1.8rem, 3vw, 2.5rem); }
-        .section-header p { color: var(--muted); font-size: 1.05rem; }
+        .section-header {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-header h2 {
+            margin-bottom: 0.75rem;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+        }
+
+        .section-header p {
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
 
         /* Categories */
-        .categories { background: var(--cream); }
+        .categories {
+            background: var(--cream);
+        }
 
         .category-card {
             background: white;
@@ -358,11 +427,21 @@
             display: block;
         }
 
-        .category-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .category-card p { color: var(--muted); font-size: 0.9rem; font-family: 'DM Sans', sans-serif; }
+        .category-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+        }
 
         /* Products */
-        .products { background: var(--warm); }
+        .products {
+            background: var(--warm);
+        }
 
         .product-card {
             background: white;
@@ -389,12 +468,24 @@
             transition: transform 0.4s ease;
         }
 
-        .product-card:hover .product-image { transform: scale(1.05); }
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
 
-        .product-image i { font-size: 3.5rem; opacity: 0.7; }
+        .product-image i {
+            font-size: 3.5rem;
+            opacity: 0.7;
+        }
 
-        .product-info { padding: 1.5rem; }
-        .product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
 
         .product-price {
             color: var(--sage);
@@ -403,7 +494,11 @@
             margin-bottom: 0.75rem;
         }
 
-        .product-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .product-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
 
         .product-tag {
             background: var(--lime);
@@ -434,7 +529,9 @@
         }
 
         /* Stats */
-        .stats { background: var(--warm); }
+        .stats {
+            background: var(--warm);
+        }
 
         .stat-card {
             background: white;
@@ -451,7 +548,11 @@
             box-shadow: var(--shadow-lg);
         }
 
-        .stat-icon { font-size: 2.5rem; color: var(--sage); margin-bottom: 1rem; }
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--sage);
+            margin-bottom: 1rem;
+        }
 
         /* ✅ FIX: stat-number now animated by JS counter */
         .stat-number {
@@ -462,7 +563,10 @@
             font-family: 'Playfair Display', serif;
         }
 
-        .stat-label { color: var(--muted); font-weight: 500; }
+        .stat-label {
+            color: var(--muted);
+            font-weight: 500;
+        }
 
         /* Newsletter */
         .newsletter {
@@ -472,8 +576,8 @@
         }
 
         .newsletter-input {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             padding: 1rem 1.5rem;
             color: var(--cream);
@@ -483,11 +587,18 @@
             transition: border-color 0.3s;
         }
 
-        .newsletter-input:focus { border-color: rgba(255,255,255,0.5); }
-        .newsletter-input::placeholder { color: rgba(245,240,232,0.6); }
+        .newsletter-input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(245, 240, 232, 0.6);
+        }
 
         /* Testimonials */
-        .testimonials { background: var(--cream); }
+        .testimonials {
+            background: var(--cream);
+        }
 
         .testimonial-card {
             background: white;
@@ -525,24 +636,46 @@
             line-height: 1;
         }
 
-        .testimonial-author { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
 
         .author-avatar {
-            width: 46px; height: 46px;
+            width: 46px;
+            height: 46px;
             background: var(--sage);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--cream);
             font-size: 1.1rem;
             flex-shrink: 0;
         }
 
-        .author-name { font-weight: 600; color: var(--text); font-size: 0.95rem; }
-        .author-title { color: var(--muted); font-size: 0.8rem; }
-        .testimonial-rating { color: var(--gold); font-size: 0.85rem; }
+        .author-name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .author-title {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .testimonial-rating {
+            color: var(--gold);
+            font-size: 0.85rem;
+        }
 
         /* Blog */
-        .blog { background: var(--warm); }
+        .blog {
+            background: var(--warm);
+        }
 
         .blog-card {
             background: white;
@@ -562,17 +695,39 @@
         .blog-image {
             height: 180px;
             background: linear-gradient(135deg, var(--lime), var(--sage));
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: transform 0.4s ease;
             overflow: hidden;
         }
 
-        .blog-card:hover .blog-image { transform: scale(1.05); }
-        .blog-image i { font-size: 2.5rem; opacity: 0.7; }
+        .blog-card:hover .blog-image {
+            transform: scale(1.05);
+        }
 
-        .blog-content { padding: 1.5rem; }
-        .blog-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
-        .blog-excerpt { color: var(--muted); margin-bottom: 1rem; line-height: 1.6; font-size: 0.9rem; }
+        .blog-image i {
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .blog-excerpt {
+            color: var(--muted);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
 
         .blog-link {
             color: var(--sage);
@@ -582,7 +737,9 @@
             transition: color 0.3s ease;
         }
 
-        .blog-link:hover { color: var(--mint); }
+        .blog-link:hover {
+            color: var(--mint);
+        }
 
         /* CTA */
         .cta {
@@ -605,17 +762,31 @@
             margin-bottom: 1rem;
         }
 
-        .footer-logo .gold-line { color: var(--gold); }
-        .footer-tagline { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .footer-logo .gold-line {
+            color: var(--gold);
+        }
 
-        .social-icons { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
+        .footer-tagline {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
 
         .social-icon {
-            width: 38px; height: 38px;
+            width: 38px;
+            height: 38px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--cream);
             transition: all 0.3s ease;
             text-decoration: none;
@@ -629,33 +800,52 @@
             border-color: var(--gold);
         }
 
-        .footer h5 { color: var(--cream); margin-bottom: 1.25rem; font-size: 1rem; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 0.5rem; }
+        .footer h5 {
+            color: var(--cream);
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
 
         .footer-links a {
-            color: rgba(245,240,232,0.7);
+            color: rgba(245, 240, 232, 0.7);
             text-decoration: none;
             transition: color 0.3s ease;
             font-size: 0.9rem;
         }
 
-        .footer-links a:hover { color: var(--mint); }
-        .footer-contact p { color: rgba(245,240,232,0.7); font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .footer-links a:hover {
+            color: var(--mint);
+        }
+
+        .footer-contact p {
+            color: rgba(245, 240, 232, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
 
         .footer-copyright {
-            border-top: 1px solid rgba(245,240,232,0.1);
+            border-top: 1px solid rgba(245, 240, 232, 0.1);
             padding-top: 2rem;
             margin-top: 2rem;
             text-align: center;
-            color: rgba(245,240,232,0.5);
+            color: rgba(245, 240, 232, 0.5);
             font-size: 0.875rem;
         }
 
         /* Toast */
         .toast-container {
             position: fixed;
-            bottom: 2rem; right: 2rem;
+            bottom: 2rem;
+            right: 2rem;
             z-index: 9998;
         }
 
@@ -672,51 +862,86 @@
             max-width: 340px;
             transform: translateX(110%);
             opacity: 0;
-            transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .eco-toast.show { transform: translateX(0); opacity: 1; }
-        .eco-toast-success { border-left: 4px solid var(--success); }
-        .eco-toast-error   { border-left: 4px solid var(--danger); }
-        .eco-toast-warning { border-left: 4px solid var(--warning); }
-        .eco-toast-info    { border-left: 4px solid var(--info); }
+        .eco-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .eco-toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .eco-toast-error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .eco-toast-warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .eco-toast-info {
+            border-left: 4px solid var(--info);
+        }
 
         .eco-toast-progress {
             position: absolute;
-            bottom: 0; left: 0;
+            bottom: 0;
+            left: 0;
             height: 3px;
             background: var(--gold);
             animation: progressBar 3s linear forwards;
         }
 
         @keyframes progressBar {
-            from { width: 100%; }
-            to   { width: 0%; }
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
         }
 
         /* Translate btn */
         .translate-btn {
             font-size: 0.85rem;
             padding: 0.4rem 0.85rem;
-            border-color: rgba(255,255,255,0.35) !important;
+            border-color: rgba(255, 255, 255, 0.35) !important;
             color: var(--cream) !important;
             transition: all 0.3s;
         }
 
         .translate-btn:hover {
-            background: rgba(255,255,255,0.15) !important;
+            background: rgba(255, 255, 255, 0.15) !important;
             color: var(--cream) !important;
         }
 
         /* Smooth scroll */
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Reduced motion support */
+        .reduced-motion * {
+            scroll-behavior: auto !important;
+        }
+
+        .reduced-motion .section,
+        .reduced-motion .floating-blob,
+        .reduced-motion .hero-badge .pulse {
+            transition: none !important;
+            animation: none !important;
+        }
 
         /* Responsive */
         @media (max-width: 991px) {
             .navbar-collapse {
-                background: rgba(10,26,15,0.97);
+                background: rgba(10, 26, 15, 0.97);
                 padding: 1rem;
                 border-radius: 0 0 1rem 1rem;
                 margin-top: 0.5rem;
@@ -724,12 +949,19 @@
         }
 
         @media (max-width: 768px) {
-            .section { padding: 3.5rem 0; }
-            .hero-subtitle { font-size: 1rem; }
+            .section {
+                padding: 3.5rem 0;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .hero-title { font-size: 2.2rem; }
+            .hero-title {
+                font-size: 2.2rem;
+            }
         }
     </style>
 </head>
@@ -750,8 +982,7 @@
             </a>
 
             <!-- ✅ FIX: toggler now visible on dark bg via custom SVG icon in CSS -->
-            <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -781,9 +1012,8 @@
                         <span class="cart-badge" id="cartCount">0</span>
                     </a>
                     <div class="dropdown">
-                        <button class="btn btn-outline-light rounded-pill dropdown-toggle translate-btn"
-                            type="button" id="accountDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-outline-light rounded-pill dropdown-toggle translate-btn" type="button"
+                            id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle"></i>
                             <span id="accountBtnLabel">Account</span>
                         </button>
@@ -803,10 +1033,12 @@
                                     <i class="fas fa-user-plus me-2"></i>Register
                                 </a>
                             </li>
-                            <li><hr class="dropdown-divider" id="logoutDivider" style="display:none;"></li>
                             <li>
-                                <a class="dropdown-item text-danger" href="#"
-                                    id="logoutLink" style="display:none;" onclick="logout(event)">
+                                <hr class="dropdown-divider" id="logoutDivider" style="display:none;">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" id="logoutLink" style="display:none;"
+                                    onclick="logout(event)">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                                 </a>
                             </li>
@@ -834,8 +1066,7 @@
                     Premium Eco-Friendly Products
                 </span>
             </div>
-            <h1 class="hero-title" id="heroTitle"
-                data-en="Sustainable Living Starts Here"
+            <h1 class="hero-title" id="heroTitle" data-en="Sustainable Living Starts Here"
                 data-ar="الحياة المستدامة تبدأ هنا">
                 Sustainable Living Starts Here
             </h1>
@@ -844,7 +1075,7 @@
                 data-ar="اكتشف مجموعتنا المختارة من المنتجات الصديقة للبيئة التي ترعى كلاً منك وكوكبنا.">
                 Discover our curated collection of eco-friendly products that nurture both you and our planet.
             </p>
-            <a href="#products" class="btn-hero">Shop Now</a>
+            <a href="products.html" class="btn-hero">Shop Now</a>
         </div>
     </section>
 
@@ -871,7 +1102,8 @@
                     <div class="category-card">
                         <i class="fas fa-spa category-icon"></i>
                         <h3 data-en="Personal Care" data-ar="العناية الشخصية">Personal Care</h3>
-                        <p data-en="Natural and cruelty-free personal care" data-ar="عناصر العناية الشخصية الطبيعية والخالية من القسوة">
+                        <p data-en="Natural and cruelty-free personal care"
+                            data-ar="عناصر العناية الشخصية الطبيعية والخالية من القسوة">
                             Natural and cruelty-free personal care
                         </p>
                     </div>
@@ -880,7 +1112,8 @@
                     <div class="category-card">
                         <i class="fas fa-leaf category-icon"></i>
                         <h3 data-en="Organic Food" data-ar="الغذاء العضوي">Organic Food</h3>
-                        <p data-en="Certified organic food for healthy living" data-ar="منتجات غذائية عضوية للحياة الصحية">
+                        <p data-en="Certified organic food for healthy living"
+                            data-ar="منتجات غذائية عضوية للحياة الصحية">
                             Certified organic food for healthy living
                         </p>
                     </div>
@@ -908,8 +1141,8 @@
                             <h3 class="product-title">Organic Cotton T-Shirt</h3>
                             <p class="product-price">EGP 250</p>
                             <div class="product-tags">
-                                <span class="product-tag">عضوي</span>
-                                <span class="product-tag">قابل لإعادة التدوير</span>
+                                <span class="product-tag">Organic Cotton</span>
+                                <span class="product-tag">Recyclable</span>
                             </div>
                             <button class="btn-add-cart" onclick="addToCart('Organic Cotton T-Shirt', 250)">
                                 <i class="fas fa-cart-plus me-2"></i>Add to Cart
@@ -926,8 +1159,8 @@
                             <h3 class="product-title">Bamboo Water Bottle</h3>
                             <p class="product-price">EGP 180</p>
                             <div class="product-tags">
-                                <span class="product-tag">خالي من البلاستيك</span>
-                                <span class="product-tag">مستدام</span>
+                                <span class="product-tag">Without Blastack</span>
+                                <span class="product-tag">Sustainable</span>
                             </div>
                             <button class="btn-add-cart" onclick="addToCart('Bamboo Water Bottle', 180)">
                                 <i class="fas fa-cart-plus me-2"></i>Add to Cart
@@ -944,8 +1177,8 @@
                             <h3 class="product-title">Natural Soap Bar</h3>
                             <p class="product-price">EGP 45</p>
                             <div class="product-tags">
-                                <span class="product-tag">خالي من القسوة</span>
-                                <span class="product-tag">نباتي</span>
+                                <span class="product-tag">Without Sulfate</span>
+                                <span class="product-tag">Natural</span>
                             </div>
                             <button class="btn-add-cart" onclick="addToCart('Natural Soap Bar', 45)">
                                 <i class="fas fa-cart-plus me-2"></i>Add to Cart
@@ -954,8 +1187,15 @@
                     </div>
                 </div>
             </div>
+
+            <div class="text-center mt-4">
+                <a href="products.html" class="btn-hero" style="display:inline-flex;align-items:center;gap:.5rem;">
+                    <i class="fas fa-leaf"></i> View More Products
+                </a>
+            </div>
         </div>
     </section>
+
 
     <!-- Stats -->
     <section class="section stats" id="stats">
@@ -986,7 +1226,8 @@
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fas fa-recycle"></i></div>
                         <div class="stat-number" data-target="250000" data-suffix="+">0</div>
-                        <div class="stat-label" data-en="Plastic Bottles Saved" data-ar="زجاجات بلاستيكية محفوظة">Plastic Bottles Saved</div>
+                        <div class="stat-label" data-en="Plastic Bottles Saved" data-ar="زجاجات بلاستيكية محفوظة">
+                            Plastic Bottles Saved</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
@@ -1006,14 +1247,13 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6 text-center">
                     <h2 class="mb-3" data-en="Join Our Community" data-ar="انضم إلى مجتمعنا">Join Our Community</h2>
-                    <p class="mb-4" data-en="Get exclusive offers and eco-tips in your inbox" data-ar="احصل على عروض حصرية ونصائح بيئية في بريدك الإلكتروني">
+                    <p class="mb-4" data-en="Get exclusive offers and eco-tips in your inbox"
+                        data-ar="احصل على عروض حصرية ونصائح بيئية في بريدك الإلكتروني">
                         Get exclusive offers and eco-tips in your inbox
                     </p>
                     <form id="newsletterForm">
-                        <input type="email" class="newsletter-input"
-                            placeholder="Enter your email address"
-                            data-en="Enter your email address"
-                            data-ar="أدخل عنوان بريدك الإلكتروني" required>
+                        <input type="email" class="newsletter-input" placeholder="Enter your email address"
+                            data-en="Enter your email address" data-ar="أدخل عنوان بريدك الإلكتروني" required>
                         <button type="submit" class="btn-hero w-100" data-en="Subscribe" data-ar="اشترك">
                             Subscribe
                         </button>
@@ -1028,7 +1268,8 @@
         <div class="container">
             <div class="section-header text-center">
                 <h2 data-en="What Our Customers Say" data-ar="ماذا يقول عملاؤنا">What Our Customers Say</h2>
-                <p data-en="Real stories from our eco-conscious community" data-ar="قصص حقيقية من مجتمعنا الواعي بيئياً">
+                <p data-en="Real stories from our eco-conscious community"
+                    data-ar="قصص حقيقية من مجتمعنا الواعي بيئياً">
                     Real stories from our eco-conscious community
                 </p>
             </div>
@@ -1109,7 +1350,8 @@
                         <div class="blog-image"><i class="fas fa-seedling text-white"></i></div>
                         <div class="blog-content">
                             <h3 class="blog-title">10 Ways to Reduce Plastic Waste</h3>
-                            <p class="blog-excerpt">Simple changes in your daily routine that can make a big impact on the environment.</p>
+                            <p class="blog-excerpt">Simple changes in your daily routine that can make a big impact on
+                                the environment.</p>
                             <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
@@ -1119,7 +1361,8 @@
                         <div class="blog-image"><i class="fas fa-home text-white"></i></div>
                         <div class="blog-content">
                             <h3 class="blog-title">Sustainable Home Cleaning</h3>
-                            <p class="blog-excerpt">Natural alternatives to chemical cleaners that are safe for your family and the planet.</p>
+                            <p class="blog-excerpt">Natural alternatives to chemical cleaners that are safe for your
+                                family and the planet.</p>
                             <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
@@ -1129,7 +1372,8 @@
                         <div class="blog-image"><i class="fas fa-utensils text-white"></i></div>
                         <div class="blog-content">
                             <h3 class="blog-title">Organic Cooking Basics</h3>
-                            <p class="blog-excerpt">Essential tips for cooking with organic ingredients and maintaining nutritional value.</p>
+                            <p class="blog-excerpt">Essential tips for cooking with organic ingredients and maintaining
+                                nutritional value.</p>
                             <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                     </div>
@@ -1146,7 +1390,8 @@
                     <h2 class="mb-3" data-en="Ready to Make a Difference?" data-ar="جاهز لإحداث فرق؟">
                         Ready to Make a Difference?
                     </h2>
-                    <p class="mb-4" style="opacity:0.85;" data-en="Join thousands who chose sustainable living" data-ar="انضم إلى آلاف العملاء الذين اختاروا الحياة المستدامة">
+                    <p class="mb-4" style="opacity:0.85;" data-en="Join thousands who chose sustainable living"
+                        data-ar="انضم إلى آلاف العملاء الذين اختاروا الحياة المستدامة">
                         Join thousands who chose sustainable living
                     </p>
                     <a href="#products" class="btn-hero" data-en="Start Shopping Today" data-ar="ابدأ التسوق اليوم">
@@ -1227,17 +1472,24 @@
         // ✅ FIX: Register GSAP plugins before use
         gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
+        // Reduced motion: disable cursor + canvas + GSAP entrance animations
+        const __prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.classList.toggle('reduced-motion', __prefersReducedMotion);
+
         // Page Transition
-        gsap.to("#pageTransition", { y: "-100%", duration: 0.6, ease: "power2.out", delay: 0.1 });
+        if (!__prefersReducedMotion) {
+            gsap.to("#pageTransition", { y: "-100%", duration: 0.6, ease: "power2.out", delay: 0.1 });
+        }
+
 
         // ─────────────────────────────────────────
         // Custom Cursor (desktop only)
         // ─────────────────────────────────────────
         const cursor = document.getElementById('cursor');
-        if (window.matchMedia('(pointer: fine)').matches) {
+        if (!__prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
             cursor.style.display = 'block';
             document.addEventListener('mousemove', (e) => {
-                gsap.to('.cursor-dot',  { x: e.clientX, y: e.clientY, duration: 0 });
+                gsap.to('.cursor-dot', { x: e.clientX, y: e.clientY, duration: 0 });
                 gsap.to('.cursor-ring', { x: e.clientX, y: e.clientY, duration: 0.3, ease: "power2.out" });
             });
 
@@ -1270,18 +1522,18 @@
         // ─────────────────────────────────────────
         function updateLoginUI() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const userName   = localStorage.getItem('userName') || 'Account';
+            const userName = localStorage.getItem('userName') || 'Account';
 
             const set = (id, show) => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = show ? 'block' : 'none';
             };
 
-            set('accountLink',   isLoggedIn);
-            set('loginLink',    !isLoggedIn);
+            set('accountLink', isLoggedIn);
+            set('loginLink', !isLoggedIn);
             set('registerLink', !isLoggedIn);
             set('logoutDivider', isLoggedIn);
-            set('logoutLink',    isLoggedIn);
+            set('logoutLink', isLoggedIn);
 
             const label = document.getElementById('accountBtnLabel');
             if (label) label.textContent = isLoggedIn ? userName : 'Account';
@@ -1312,19 +1564,36 @@
         }
 
         function updateCartBadge() {
-            const cart  = getCart();
+            const cart = getCart();
             const total = cart.reduce((sum, item) => sum + item.qty, 0);
             document.getElementById('cartCount').textContent = total;
         }
 
+        function slugId(str) { return String(str).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+
+        function normalizeCart(cart) {
+            return (Array.isArray(cart) ? cart : []).map(i => {
+                const name = i && i.name ? String(i.name) : 'Item';
+                const price = Number(i && i.price ? i.price : 0);
+                const qty = Math.max(1, Math.min(10, parseInt(i && i.qty ? i.qty : 1, 10) || 1));
+                const id = i && i.id ? String(i.id) : slugId(name);
+                return { id, name, price, qty };
+            });
+        }
+
         function addToCart(name, price) {
-            const cart     = getCart();
-            const existing = cart.find(i => i.name === name);
+            const cart = normalizeCart(getCart());
+            const id = slugId(name);
+
+            const existing = cart.find(i => i.id === id);
             if (existing) {
-                existing.qty++;
+                existing.qty = Math.min(10, existing.qty + 1);
+                existing.price = Number(price);
+                existing.name = String(name);
             } else {
-                cart.push({ name, price, qty: 1 });
+                cart.push({ id, name, price: Number(price), qty: 1 });
             }
+
             saveCart(cart);
             showToast(`"${name}" added to cart! 🛒`, 'success');
         }
@@ -1335,10 +1604,10 @@
         // Hero Particle Canvas — ✅ FIX: resize handler added
         // ─────────────────────────────────────────
         const canvas = document.getElementById('heroCanvas');
-        const ctx    = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
         function resizeCanvas() {
-            canvas.width  = window.innerWidth;
+            canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
 
@@ -1350,8 +1619,8 @@
         class Particle {
             constructor() { this.reset(); }
             reset() {
-                this.x  = Math.random() * canvas.width;
-                this.y  = Math.random() * canvas.height;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
                 this.vx = (Math.random() - 0.5) * 0.5;
                 this.vy = (Math.random() - 0.5) * 0.5;
                 this.size = Math.random() * 2 + 1;
@@ -1359,8 +1628,8 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height)  this.vy *= -1;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
                 ctx.beginPath();
@@ -1373,6 +1642,7 @@
         for (let i = 0; i < 80; i++) particles.push(new Particle());
 
         function animateParticles() {
+            if (__prefersReducedMotion) return; // stop animation loop
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
 
@@ -1380,7 +1650,7 @@
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const d  = Math.sqrt(dx * dx + dy * dy);
+                    const d = Math.sqrt(dx * dx + dy * dy);
                     if (d < 100) {
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
@@ -1399,49 +1669,51 @@
         // ─────────────────────────────────────────
         // Hero text animation (GSAP TextPlugin)
         // ─────────────────────────────────────────
-        gsap.from("#heroTitle", {
-            duration: 1.5,
-            text: { value: "" },
-            ease: "none",
-            delay: 0.7
-        });
-
-        // ─────────────────────────────────────────
-        // Scroll Reveal
-        // ─────────────────────────────────────────
-        gsap.utils.toArray('.section').forEach(section => {
-            ScrollTrigger.create({
-                trigger: section,
-                start: "top 82%",
-                onEnter: () => section.classList.add('revealed')
+        if (!__prefersReducedMotion) {
+            gsap.from("#heroTitle", {
+                duration: 1.5,
+                text: { value: "" },
+                ease: "none",
+                delay: 0.7
             });
-        });
 
-        gsap.utils.toArray('.category-card, .product-card, .testimonial-card, .blog-card').forEach((card, i) => {
-            gsap.from(card, {
-                scrollTrigger: { trigger: card, start: "top 85%" },
-                y: 30,
-                opacity: 0,
-                duration: 0.5,
-                delay: (i % 3) * 0.1
+            // ─────────────────────────────────────────
+            // Scroll Reveal
+            // ─────────────────────────────────────────
+            gsap.utils.toArray('.section').forEach(section => {
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: "top 82%",
+                    onEnter: () => section.classList.add('revealed')
+                });
             });
-        });
+
+            gsap.utils.toArray('.category-card, .product-card, .testimonial-card, .blog-card').forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: (i % 3) * 0.1
+                });
+            });
+        }
 
         // ─────────────────────────────────────────
         // ✅ FIX: Stats Counter Animation
         // ─────────────────────────────────────────
         function animateCounter(el) {
-            const target   = parseFloat(el.dataset.target);
-            const suffix   = el.dataset.suffix || '';
+            const target = parseFloat(el.dataset.target);
+            const suffix = el.dataset.suffix || '';
             const decimals = parseInt(el.dataset.decimal || '0');
             const duration = 2000;
-            const start    = performance.now();
+            const start = performance.now();
 
             function step(now) {
-                const elapsed  = now - start;
+                const elapsed = now - start;
                 const progress = Math.min(elapsed / duration, 1);
-                const eased    = 1 - Math.pow(1 - progress, 3);
-                const current  = target * eased;
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = target * eased;
 
                 el.textContent = (decimals > 0
                     ? current.toFixed(decimals)
@@ -1474,8 +1746,8 @@
         // ─────────────────────────────────────────
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
-            const toast     = document.createElement('div');
-            const icons     = { success: 'check-circle', error: 'times-circle', warning: 'exclamation-triangle', info: 'info-circle' };
+            const toast = document.createElement('div');
+            const icons = { success: 'check-circle', error: 'times-circle', warning: 'exclamation-triangle', info: 'info-circle' };
 
             toast.className = `eco-toast eco-toast-${type}`;
             toast.innerHTML = `
@@ -1515,7 +1787,7 @@
 
             document.getElementById('translateBtnText').textContent = lang === 'en' ? 'AR' : 'EN';
             document.documentElement.lang = lang;
-            document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
             currentLang = lang;
         }
 
@@ -1524,4 +1796,5 @@
         });
     </script>
 </body>
+
 </html>

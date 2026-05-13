@@ -842,11 +842,6 @@
                 <a href="wishlist.html" class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
                     <i class="fas fa-heart"></i>
                 </a>
-                <a href="cart.html" class="cart-btn" aria-label="Shopping cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Cart</span>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </a>
                 <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"
                     aria-controls="mobileDrawer">
                     <span></span><span></span><span></span>
@@ -976,16 +971,6 @@
                 </button>
             </form>
 
-            <div class="divider">Or sign up with</div>
-
-            <div class="social-register">
-                <a href="#google" class="social-btn">
-                    <i class="fab fa-google"></i> Google
-                </a>
-                <a href="#facebook" class="social-btn">
-                    <i class="fab fa-facebook"></i> Facebook
-                </a>
-            </div>
 
             <div class="register-footer">
                 Already have an account? <a href="login.html">Login here</a>
@@ -1002,6 +987,78 @@
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script>
+        // ═══ SECTION A: SHARED HELPERS ═══
+        // ── Cart helpers ──
+        function getCart() {
+            try { return JSON.parse(localStorage.getItem('cart') || '[]'); }
+            catch (e) { return []; }
+        }
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateAllBadges();
+        }
+        function addItemToCart(item) {
+            const cart = getCart();
+            const existing = cart.find(i => i.id === item.id);
+            if (existing) { existing.qty += (item.qty || 1); }
+            else { cart.push({ ...item, qty: item.qty || 1 }); }
+            saveCart(cart);
+        }
+        function removeItemFromCart(itemId) {
+            saveCart(getCart().filter(i => i.id !== itemId));
+        }
+        function clearCart() {
+            localStorage.removeItem('cart');
+            updateAllBadges();
+        }
+
+        // ── Wishlist helpers ──
+        function getWishlist() {
+            try { return JSON.parse(localStorage.getItem('wishlist') || '[]'); }
+            catch (e) { return []; }
+        }
+        function saveWishlist(list) {
+            localStorage.setItem('wishlist', JSON.stringify(list));
+            updateAllBadges();
+        }
+        function isInWishlist(itemId) {
+            return getWishlist().some(i => i.id === itemId);
+        }
+        function toggleWishlistItem(item) {
+            const list = getWishlist();
+            const idx = list.findIndex(i => i.id === item.id);
+            if (idx >= 0) { list.splice(idx, 1); saveWishlist(list); return false; }
+            else { list.push(item); saveWishlist(list); return true; }
+        }
+
+        // ── Badge updates ──
+        function updateAllBadges() {
+            // Cart badge
+            const cartCount = getCart().reduce((s, i) => s + (i.qty || 0), 0);
+            document.querySelectorAll(
+                '#cartBadge,#cartBadgeNav,#cartCount,.cart-badge,.cart-badge-nav'
+            ).forEach(el => { el.textContent = cartCount; });
+
+            // Wishlist badge
+            const wlCount = getWishlist().length;
+            document.querySelectorAll(
+                '#wishlistBadge,.wishlist-badge'
+            ).forEach(el => {
+                el.textContent = wlCount;
+                el.style.display = wlCount > 0 ? 'flex' : 'none';
+            });
+        }
+
+        // ── Slug helper ──
+        function slugify(str) {
+            return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        }
+
+        // ── Auth check ──
+        function isLoggedIn() {
+            return localStorage.getItem('isLoggedIn') === 'true';
+        }
+
         // ─── Page Transition ───
         gsap.to("#pageTransition", {
             y: "-100%", duration: 0.7, ease: "power3.out", delay: 0.05,
@@ -1011,6 +1068,31 @@
         // ─── Card entrance ───
         gsap.to("#registerContainer", {
             opacity: 1, y: 0, duration: 0.7, ease: "power3.out", delay: 0.3
+        });
+
+        // ─── DOMContentLoaded setup ───
+        document.addEventListener('DOMContentLoaded', function () {
+            // C2: Prevent double registration
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = 'account.html';
+                return;
+            }
+
+            // Update badges on load
+            updateAllBadges();
+
+            // C3: Email uniqueness check on blur
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                emailInput.addEventListener('blur', function () {
+                    const enteredEmail = this.value.trim();
+                    const storedEmail = localStorage.getItem('userEmail');
+                    if (enteredEmail && storedEmail && enteredEmail === storedEmail &&
+                        localStorage.getItem('isLoggedIn') === 'true') {
+                        showError('emailGroup', 'emailError', 'An account with this email already exists.');
+                    }
+                });
+            }
         });
 
         // ─── Hamburger / Mobile Drawer ───
@@ -1040,6 +1122,15 @@
 
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && drawerOpen) toggleDrawer(false);
+        });
+
+        // SECTION B4: Set active nav link based on current page
+        const currentFile = window.location.pathname.split('/').pop() || 'register.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && (href === currentFile || (currentFile === '' && href === 'index.html'))) {
+                link.classList.add('active');
+            }
         });
 
         // ─── Password Toggle ───
@@ -1166,15 +1257,29 @@
                 const firstName = document.getElementById('firstName').value.trim();
                 const lastName = document.getElementById('lastName').value.trim();
                 const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
 
+                // C1: Save user data on registration (used by login.html)
                 localStorage.setItem('userEmail', email);
-                localStorage.setItem('userName', `${firstName} ${lastName}`);
+                localStorage.setItem('userName', firstName + ' ' + lastName);
+                localStorage.setItem('userPassword', password);
                 localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userRegisteredAt', new Date().toISOString());
+                // also store remembered email so login can prefill after refresh if needed
+                localStorage.setItem('rememberedEmail', email);
+
+                // C1: NEW ACCOUNT = FRESH START
+                localStorage.setItem('cart', '[]');
+                localStorage.setItem('wishlist', '[]');
 
                 registerBtn.innerHTML = '<i class="fas fa-check"></i> <span>Account Created!</span>';
                 registerBtn.style.background = 'linear-gradient(135deg, var(--success), #16a34a)';
 
                 showToast('Account created successfully! Redirecting…', 'success');
+                // M3: Prevent form resubmission
+                if (history.replaceState) {
+                    history.replaceState(null, null, window.location.href);
+                }
                 setTimeout(() => { window.location.href = 'account.html'; }, 1200);
             }, 1200);
         });

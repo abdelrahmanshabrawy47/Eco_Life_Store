@@ -1050,8 +1050,9 @@
 
                 <!-- Product 1 -->
                 <div class="col-lg-4 col-md-6 product-col" data-category="home" data-price="180" data-rating="4.5"
-                    data-name="Bamboo Cutting Board">
+                    data-name="Bamboo Cutting Board" data-product-id="1" data-product-page="product-detail.html">
                     <div class="product-card">
+
                         <div class="product-image img-home">
                             <i class="fas fa-utensils" style="color:#2d5a3d;"></i>
                             <span class="product-badge badge-new">New</span>
@@ -1076,6 +1077,7 @@
                                 <button class="btn-add-cart" onclick="addToCart('Bamboo Cutting Board', 180)">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -1083,7 +1085,8 @@
 
                 <!-- Product 2 -->
                 <div class="col-lg-4 col-md-6 product-col" data-category="personal" data-price="95" data-rating="5"
-                    data-name="Natural Shampoo Bar">
+                    data-name="Natural Shampoo Bar" data-product-id="2" data-product-page="product-detail.html">
+
                     <div class="product-card">
                         <div class="product-image img-personal">
                             <i class="fas fa-pump-soap" style="color:#185fa5;"></i>
@@ -1108,6 +1111,7 @@
                                 <button class="btn-add-cart" onclick="addToCart('Natural Shampoo Bar', 95)">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -1115,7 +1119,8 @@
 
                 <!-- Product 3 -->
                 <div class="col-lg-4 col-md-6 product-col" data-category="food" data-price="35" data-rating="4.5"
-                    data-name="Organic Apple Juice">
+                    data-name="Organic Apple Juice" data-product-id="3" data-product-page="product-detail.html">
+
                     <div class="product-card">
                         <div class="product-image img-food">
                             <i class="fas fa-apple-alt" style="color:#854f0b;"></i>
@@ -1141,6 +1146,7 @@
                                 <button class="btn-add-cart" onclick="addToCart('Organic Apple Juice', 35)">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -1148,7 +1154,8 @@
 
                 <!-- Product 4 -->
                 <div class="col-lg-4 col-md-6 product-col" data-category="fashion" data-price="350" data-rating="5"
-                    data-name="Organic Cotton Hoodie">
+                    data-name="Organic Cotton Hoodie" data-product-id="4" data-product-page="product-detail.html">
+
                     <div class="product-card">
                         <div class="product-image img-fashion">
                             <i class="fas fa-tshirt" style="color:#3c3489;"></i>
@@ -1173,6 +1180,7 @@
                                 <button class="btn-add-cart" onclick="addToCart('Organic Cotton Hoodie', 350)">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -1180,7 +1188,8 @@
 
                 <!-- Product 5 -->
                 <div class="col-lg-4 col-md-6 product-col" data-category="garden" data-price="120" data-rating="4.5"
-                    data-name="Herb Garden Kit">
+                    data-name="Herb Garden Kit" data-product-id="5" data-product-page="product-detail.html">
+
                     <div class="product-card">
                         <div class="product-image img-garden">
                             <i class="fas fa-seedling" style="color:#0f6e56;"></i>
@@ -1205,6 +1214,7 @@
                                 <button class="btn-add-cart" onclick="addToCart('Herb Garden Kit', 120)">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -1212,7 +1222,8 @@
 
                 <!-- Product 6 -->
                 <div class="col-lg-4 col-md-6 product-col" data-category="home" data-price="65" data-rating="5"
-                    data-name="Natural Fiber Brush">
+                    data-name="Natural Fiber Brush" data-product-id="6" data-product-page="product-detail.html">
+
                     <div class="product-card">
                         <div class="product-image img-home">
                             <i class="fas fa-broom" style="color:#3b6d11;"></i>
@@ -1238,6 +1249,7 @@
                                 <button class="btn-add-cart" onclick="addToCart('Natural Fiber Brush', 65)">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -1379,6 +1391,31 @@
             });
         }
 
+        /* ── Product click -> Product detail ── */
+        function goToProductDetail(colEl) {
+            const id = colEl && colEl.dataset ? colEl.dataset.productId : null;
+            const page = colEl && colEl.dataset ? colEl.dataset.productPage : 'product-detail.html';
+            if (!id) return;
+            window.location.href = `${page}?id=${id}`;
+        }
+
+        document.querySelectorAll('.product-col').forEach(colEl => {
+            colEl.style.cursor = 'pointer';
+            colEl.addEventListener('click', (e) => {
+                // If user clicked wishlist or add-to-cart, do NOT navigate.
+                if (e.target && e.target.closest('.wishlist-btn')) return;
+                if (e.target && e.target.closest('.btn-add-cart')) return;
+
+                // Always navigate for any other click inside the product
+                e.preventDefault();
+                e.stopPropagation();
+                goToProductDetail(colEl);
+            });
+        });
+
+
+
+
         /* ── Cart ── */
         function getCart() { return JSON.parse(localStorage.getItem('cart') || '[]'); }
         function saveCart(cart) { localStorage.setItem('cart', JSON.stringify(cart)); updateCartBadge(); }
@@ -1386,10 +1423,31 @@
             const total = getCart().reduce((s, i) => s + i.qty, 0);
             document.getElementById('cartCount').textContent = total;
         }
+        function slugId(str) { return String(str).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+
+        function normalizeCart(cart) {
+            return (Array.isArray(cart) ? cart : []).map(i => {
+                const name = i && i.name ? String(i.name) : 'Item';
+                const price = Number(i && i.price ? i.price : 0);
+                const qty = Math.max(1, Math.min(10, parseInt(i && i.qty ? i.qty : 1, 10) || 1));
+                const id = i && i.id ? String(i.id) : slugId(name);
+                return { id, name, price, qty };
+            });
+        }
+
         function addToCart(name, price) {
-            const cart = getCart();
-            const existing = cart.find(i => i.name === name);
-            existing ? existing.qty++ : cart.push({ name, price, qty: 1 });
+            const cart = normalizeCart(getCart());
+            const id = slugId(name);
+            const existing = cart.find(i => i.id === id);
+
+            if (existing) {
+                existing.qty = Math.min(10, existing.qty + 1);
+                existing.price = Number(price);
+                existing.name = String(name);
+            } else {
+                cart.push({ id, name, price: Number(price), qty: 1 });
+            }
+
             saveCart(cart);
             showToast(`"${name}" added to cart! 🛒`, 'success');
         }

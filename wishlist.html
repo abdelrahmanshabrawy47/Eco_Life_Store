@@ -957,11 +957,24 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
+        // Reduced motion support
+        const __prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.classList.toggle('reduced-motion', __prefersReducedMotion);
+        if (__prefersReducedMotion) {
+            try { gsap.killTweensOf('*'); } catch (e) { }
+        }
+
         // ─── Page Transition ───
-        gsap.to("#pageTransition", {
-            y: "-100%", duration: 0.7, ease: "power3.out", delay: 0.05,
-            onComplete: () => document.getElementById('pageTransition').style.display = 'none'
-        });
+        if (!__prefersReducedMotion) {
+            gsap.to("#pageTransition", {
+                y: "-100%", duration: 0.7, ease: "power3.out", delay: 0.05,
+                onComplete: () => document.getElementById('pageTransition').style.display = 'none'
+            });
+        } else {
+            const pt = document.getElementById('pageTransition');
+            if (pt) pt.style.display = 'none';
+        }
+
 
         // ─── Hamburger / Mobile Drawer ───
         const hamburger = document.getElementById('hamburger');
@@ -1065,7 +1078,7 @@
                             <span>${item.rating} (${item.reviews} reviews)</span>
                         </div>
                         <div class="card-price-row">
-<span class="card-price">EGP ${item.price.toFixed(2)}</span>
+                            <span class="card-price">EGP ${item.price.toFixed(2)}</span>
                             ${item.oldPrice ? `<span class="card-price-old">$${item.oldPrice.toFixed(2)}</span>` : ''}
                             ${discount ? `<span class="card-discount">-${discount}%</span>` : ''}
                         </div>

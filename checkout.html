@@ -908,13 +908,6 @@
             <li><a href="register.html" id="mobileRegisterLink">Register</a></li>
         </ul>
     </div>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="#categories">Categories</a></li>
-    <li><a href="products.html">Products</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    </ul>
-    </div>
 
     <!-- Page Header -->
     <section class="page-header">
@@ -1389,6 +1382,14 @@
 
         // Call updateLoginUI on page load
         updateLoginUI();
+
+        // Reduced motion: disable GSAP animations/ScrollTrigger behavior
+        const __prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (__prefersReducedMotion) {
+            try {
+                gsap.killTweensOf('*');
+            } catch (e) {}
+        }
     </script>
 </body>
 
