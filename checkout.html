@@ -1037,24 +1037,27 @@
                                 <div class="form-section">
                                     <h3 class="section-title">Payment Method</h3>
                                     <div class="payment-methods">
-                                        <div class="payment-method selected" data-method="card">
-                                            <div class="payment-method-icon">
-                                                <i class="fas fa-credit-card"></i>
-                                            </div>
-                                            <div class="payment-method-label">Credit Card</div>
-                                        </div>
-                                        <div class="payment-method" data-method="paypal">
-                                            <div class="payment-method-icon">
-                                                <i class="fab fa-paypal"></i>
-                                            </div>
-                                            <div class="payment-method-label">PayPal</div>
-                                        </div>
-                                        <div class="payment-method" data-method="cash">
+                                        <div class="payment-method" data-method="cash" id="paymentCash"
+                                            onclick="selectPaymentMethod('cash')">
                                             <div class="payment-method-icon">
                                                 <i class="fas fa-money-bill-wave"></i>
                                             </div>
                                             <div class="payment-method-label">Cash on Delivery</div>
                                         </div>
+
+                                        <div class="payment-method disabled" data-method="card" style="display:none;">
+                                            <div class="payment-method-icon">
+                                                <i class="fas fa-credit-card"></i>
+                                            </div>
+                                            <div class="payment-method-label">Credit Card</div>
+                                        </div>
+                                        <div class="payment-method disabled" data-method="paypal" style="display:none;">
+                                            <div class="payment-method-icon">
+                                                <i class="fab fa-paypal"></i>
+                                            </div>
+                                            <div class="payment-method-label">PayPal</div>
+                                        </div>
+
                                     </div>
 
                                     <div id="cardFields">
@@ -1388,7 +1391,7 @@
         if (__prefersReducedMotion) {
             try {
                 gsap.killTweensOf('*');
-            } catch (e) {}
+            } catch (e) { }
         }
     </script>
 </body>

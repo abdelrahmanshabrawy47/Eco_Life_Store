@@ -1074,8 +1074,13 @@
                                 <span class="product-tag">Kitchen</span>
                             </div>
                             <div class="product-actions">
-                                <button class="btn-add-cart" onclick="addToCart('Bamboo Cutting Board', 180)">
+                                <button class="btn-add-cart"
+                                    onclick="addToCart('Bamboo Cutting Board', 180); event.stopPropagation();">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                                <button class="btn-add-cart" style="background:var(--gold);color:var(--deep);flex:0.95;"
+                                    onclick="buyFromCard(1); event.stopPropagation();">
+                                    <i class="fas fa-bolt me-1"></i> Buy
                                 </button>
 
                             </div>
@@ -1108,8 +1113,13 @@
                                 <span class="product-tag">Plastic-Free</span>
                             </div>
                             <div class="product-actions">
-                                <button class="btn-add-cart" onclick="addToCart('Natural Shampoo Bar', 95)">
+                                <button class="btn-add-cart"
+                                    onclick="addToCart('Natural Shampoo Bar', 95); event.stopPropagation();">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                                <button class="btn-add-cart" style="background:var(--gold);color:var(--deep);flex:0.95;"
+                                    onclick="buyFromCard(2); event.stopPropagation();">
+                                    <i class="fas fa-bolt me-1"></i> Buy
                                 </button>
 
                             </div>
@@ -1143,8 +1153,13 @@
                                 <span class="product-tag">Local</span>
                             </div>
                             <div class="product-actions">
-                                <button class="btn-add-cart" onclick="addToCart('Organic Apple Juice', 35)">
+                                <button class="btn-add-cart"
+                                    onclick="addToCart('Organic Apple Juice', 35); event.stopPropagation();">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                                <button class="btn-add-cart" style="background:var(--gold);color:var(--deep);flex:0.95;"
+                                    onclick="buyFromCard(3); event.stopPropagation();">
+                                    <i class="fas fa-bolt me-1"></i> Buy
                                 </button>
 
                             </div>
@@ -1177,8 +1192,13 @@
                                 <span class="product-tag">Recyclable</span>
                             </div>
                             <div class="product-actions">
-                                <button class="btn-add-cart" onclick="addToCart('Organic Cotton Hoodie', 350)">
+                                <button class="btn-add-cart"
+                                    onclick="addToCart('Organic Cotton Hoodie', 350); event.stopPropagation();">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                                <button class="btn-add-cart" style="background:var(--gold);color:var(--deep);flex:0.95;"
+                                    onclick="buyFromCard(4); event.stopPropagation();">
+                                    <i class="fas fa-bolt me-1"></i> Buy
                                 </button>
 
                             </div>
@@ -1211,8 +1231,13 @@
                                 <span class="product-tag">Educational</span>
                             </div>
                             <div class="product-actions">
-                                <button class="btn-add-cart" onclick="addToCart('Herb Garden Kit', 120)">
+                                <button class="btn-add-cart"
+                                    onclick="addToCart('Herb Garden Kit', 120); event.stopPropagation();">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                                <button class="btn-add-cart" style="background:var(--gold);color:var(--deep);flex:0.95;"
+                                    onclick="buyFromCard(5); event.stopPropagation();">
+                                    <i class="fas fa-bolt me-1"></i> Buy
                                 </button>
 
                             </div>
@@ -1246,8 +1271,13 @@
                                 <span class="product-tag">Cleaning</span>
                             </div>
                             <div class="product-actions">
-                                <button class="btn-add-cart" onclick="addToCart('Natural Fiber Brush', 65)">
+                                <button class="btn-add-cart"
+                                    onclick="addToCart('Natural Fiber Brush', 65); event.stopPropagation();">
                                     <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                </button>
+                                <button class="btn-add-cart" style="background:var(--gold);color:var(--deep);flex:0.95;"
+                                    onclick="buyFromCard(6); event.stopPropagation();">
+                                    <i class="fas fa-bolt me-1"></i> Buy
                                 </button>
 
                             </div>
@@ -1567,6 +1597,26 @@
             if (label) label.textContent = loggedIn ? userName : 'Account';
         }
         updateLoginUI();
+
+        /* ── Buy from product card (Buy button) ── */
+        function buyFromCard(productId) {
+            const id = parseInt(productId, 10);
+            if (!Number.isFinite(id)) return;
+
+            const col = document.querySelector(`.product-col[data-product-id="${id}"]`);
+            if (!col) return;
+
+            const name = col.dataset.name;
+            const price = parseFloat(col.dataset.price);
+
+            if (!name || !Number.isFinite(price)) return;
+
+            // Add exactly 1 item and redirect to checkout
+            addToCart(name, price);
+            // Ensure checkout flow is COD-focused (checkout page decides UI)
+            window.location.href = 'checkout.html';
+        }
+
 
         function logout(e) {
             e.preventDefault();

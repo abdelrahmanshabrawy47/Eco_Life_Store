@@ -2647,35 +2647,241 @@
         });
         document.addEventListener('click', () => accDropdown.classList.remove('open'));
 
-        // ─── Thumbnail Gallery ───
-        const thumbs = document.querySelectorAll('.thumb');
+        // ─── Product Catalog + Dynamic Load ───
+        const PRODUCTS = {
+            1: {
+                id: 1,
+                category: 'Sustainable Fashion',
+                title: 'Organic Cotton T-Shirt',
+                price: 250,
+                originalPrice: 310,
+                savePercent: 19,
+                description: `Experience ultimate comfort with our premium organic cotton t-shirt. Made from 100% GOTS certified organic cotton — soft, breathable, and kind to the planet. Perfect for everyday wear or as a sustainable fashion statement.`,
+                sku: 'ECO-TSHIRT-001',
+                material: '100% Organic Cotton',
+                care: 'Machine wash cold, hang dry',
+                origin: 'Fair Trade Certified',
+                availabilityText: 'In Stock (42 units)',
+                availabilityInStock: true,
+                ratingScore: 4.5,
+                ratingCount: 128,
+                colors: ['Forest Green', 'Ocean Blue', 'Desert Sand', 'Charcoal', 'Soft White'],
+                emoji: '👕',
+                galleryBg: [
+                    'linear-gradient(135deg,#a8d5b5,#7bbf8a)',
+                    'linear-gradient(135deg,#bbdefb,#90caf9)',
+                    'linear-gradient(135deg,#ffe0b2,#ffcc80)',
+                    'linear-gradient(135deg,#cfd8dc,#b0bec5)',
+                    'linear-gradient(135deg,#f5f0e8,#e8dfc8)'
+                ],
+                defaultColor: 'Forest Green',
+                sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                unavailableSizes: ['XXL'],
+                tabs: {
+                    description: {
+                        title: 'Premium Organic Cotton T-Shirt',
+                        paragraphs: [
+                            `Our organic cotton t-shirt is crafted with the highest standards of sustainability and comfort. Each shirt is made from 100% GOTS certified organic cotton — no harmful chemicals, no pesticides, just pure natural fibre.`,
+                            `The fabric is naturally soft, breathable, and durable. Classic fit, reinforced stitching, comfortable neckline. Available in a range of earth-friendly colors that are dyed with AZO-free, OEKO-TEX certified dyes.`
+                        ],
+                        bullets: [
+                            'Reduces water usage by up to 91% vs conventional cotton',
+                            'Free from toxic chemicals and pesticides',
+                            'Biodegradable and compostable at end of life',
+                            'Supports fair trade practices and living wages',
+                            'Carbon-neutral shipping available at checkout',
+                            'Packaged in 100% recycled, plastic-free materials'
+                        ]
+                    }
+                }
+            },
+            4: {
+                id: 4,
+                category: 'Sustainable Fashion',
+                title: 'Organic Cotton Hoodie',
+                price: 350,
+                originalPrice: 430,
+                savePercent: 19,
+                description: `Stay cozy in our organic cotton hoodie—soft, breathable, and dyed with AZO-free eco pigments.`,
+                sku: 'ECO-HOODIE-004',
+                material: '100% Organic Cotton',
+                care: 'Machine wash cold, hang dry',
+                origin: 'Fair Trade Certified',
+                availabilityText: 'In Stock',
+                availabilityInStock: true,
+                ratingScore: 5.0,
+                ratingCount: 67,
+                colors: ['Forest Green', 'Ocean Blue', 'Desert Sand', 'Charcoal', 'Soft White'],
+                emoji: '🧥',
+                galleryBg: [
+                    'linear-gradient(135deg,#a8d5b5,#7bbf8a)',
+                    'linear-gradient(135deg,#bbdefb,#90caf9)',
+                    'linear-gradient(135deg,#ffe0b2,#ffcc80)',
+                    'linear-gradient(135deg,#cfd8dc,#b0bec5)',
+                    'linear-gradient(135deg,#f5f0e8,#e8dfc8)'
+                ],
+                defaultColor: 'Forest Green',
+                sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                unavailableSizes: [],
+                tabs: {}
+            },
+            6: {
+                id: 6,
+                category: 'Home Care',
+                title: 'Natural Fiber Brush',
+                price: 65,
+                originalPrice: 80,
+                savePercent: 19,
+                description: `A durable natural fiber brush for everyday cleaning—biodegradable and eco-friendly.`,
+                sku: 'ECO-BRUSH-006',
+                material: 'Natural Fibers',
+                care: 'Rinse after use',
+                origin: 'Eco Supply Chain',
+                availabilityText: 'In Stock',
+                availabilityInStock: true,
+                ratingScore: 5.0,
+                ratingCount: 112,
+                colors: ['Forest Green', 'Desert Sand', 'Charcoal', 'Soft White'],
+                emoji: '🧼',
+                galleryBg: [
+                    'linear-gradient(135deg,#a8d5b5,#7bbf8a)',
+                    'linear-gradient(135deg,#ffe0b2,#ffcc80)',
+                    'linear-gradient(135deg,#cfd8dc,#b0bec5)',
+                    'linear-gradient(135deg,#f5f0e8,#e8dfc8)'
+                ],
+                defaultColor: 'Forest Green',
+                sizes: ['One Size'],
+                unavailableSizes: []
+            }
+        };
+
+        function getProductFromQuery() {
+            const params = new URLSearchParams(window.location.search);
+            const rawId = params.get('id');
+            const id = rawId ? parseInt(rawId, 10) : NaN;
+            if (!Number.isFinite(id) || !PRODUCTS[id]) return PRODUCTS[1];
+            return PRODUCTS[id];
+        }
+
+        const product = getProductFromQuery();
+
+        // sync static DOM placeholders from product catalog
+        document.querySelector('.product-category') && (document.querySelector('.product-category').textContent = `${product.category}`);
+        const titleEl = document.querySelector('.product-title');
+        if (titleEl) titleEl.textContent = product.title;
+
+        const displayPrice = document.getElementById('displayPrice');
+        if (displayPrice) displayPrice.textContent = `EGP ${product.price}`;
+        const originalPriceEl = document.querySelector('.price-original');
+        if (originalPriceEl) originalPriceEl.textContent = `EGP ${product.originalPrice}`;
+        const priceSaveEl = document.querySelector('.price-save');
+        if (priceSaveEl) priceSaveEl.textContent = `Save ${product.savePercent}%`;
+
+        const descEl = document.querySelector('.product-desc');
+        if (descEl) descEl.textContent = product.description;
+
+        const skuVal = document.querySelector('.meta-table .meta-row:nth-child(1) .meta-val');
+        const materialVal = document.querySelector('.meta-table .meta-row:nth-child(2) .meta-val');
+        const careVal = document.querySelector('.meta-table .meta-row:nth-child(3) .meta-val');
+        const originVal = document.querySelector('.meta-table .meta-row:nth-child(4) .meta-val');
+        const availabilityVal = document.querySelector('.meta-table .meta-row:nth-child(5) .meta-val');
+        if (skuVal) skuVal.textContent = product.sku;
+        if (materialVal) materialVal.textContent = product.material;
+        if (careVal) careVal.textContent = product.care;
+        if (originVal) originVal.textContent = product.origin;
+        if (availabilityVal) {
+            availabilityVal.textContent = product.availabilityText;
+            availabilityVal.style.color = product.availabilityInStock ? 'var(--success)' : 'var(--muted)';
+        }
+
+        // rating
+        const ratingScoreEl = document.querySelector('.rating-score');
+        if (ratingScoreEl) ratingScoreEl.textContent = String(product.ratingScore);
+        const ratingCountEl = document.querySelector('.rating-count');
+        if (ratingCountEl) ratingCountEl.textContent = `(${product.ratingCount} reviews)`;
+
+        // gallery + colors
         const mainEmoji = document.getElementById('mainEmoji');
         const mainWrap = document.getElementById('mainImageWrap');
-        const bgColors = [
+        if (mainEmoji) mainEmoji.textContent = product.emoji || '👕';
+
+        const thumbs = document.querySelectorAll('.thumb');
+        const bgColors = product.galleryBg && product.galleryBg.length ? product.galleryBg : [
             'linear-gradient(135deg,#a8d5b5,#7bbf8a)',
             'linear-gradient(135deg,#bbdefb,#90caf9)',
             'linear-gradient(135deg,#ffe0b2,#ffcc80)',
             'linear-gradient(135deg,#cfd8dc,#b0bec5)',
             'linear-gradient(135deg,#f5f0e8,#e8dfc8)'
         ];
+
+        const desiredColors = product.colors && product.colors.length ? product.colors : ['Forest Green', 'Ocean Blue', 'Desert Sand', 'Charcoal', 'Soft White'];
+        thumbs.forEach((thumb, i) => {
+            const c = desiredColors[i] || desiredColors[0];
+            thumb.setAttribute('data-color', c);
+            if (thumb.hasAttribute('data-emoji')) thumb.setAttribute('data-emoji', product.emoji || '👕');
+            const style = thumb.getAttribute('style') || '';
+            if (bgColors[i]) thumb.style.background = bgColors[i];
+            thumb.classList.toggle('active', c === product.defaultColor);
+        });
+        if (mainWrap && bgColors[0]) mainWrap.style.background = bgColors[0];
+
+        // sync default selectedColor + swatch active
+        const selectedColorEl = document.getElementById('selectedColor');
+        if (selectedColorEl) selectedColorEl.textContent = product.defaultColor || desiredColors[0];
+        document.querySelectorAll('.swatch').forEach(s => {
+            const c = s.getAttribute('data-color');
+            s.classList.toggle('active', c === (product.defaultColor || desiredColors[0]));
+        });
+
+        // ─── Thumbnail Gallery (event wiring, uses existing DOM) ───
         thumbs.forEach((thumb, i) => {
             thumb.addEventListener('click', () => {
                 thumbs.forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
                 gsap.fromTo(mainEmoji, { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.7)" });
-                mainWrap.style.background = bgColors[i];
-                // sync color swatch
+                if (mainWrap && bgColors[i]) mainWrap.style.background = bgColors[i];
+
                 const color = thumb.getAttribute('data-color');
                 document.querySelectorAll('.swatch').forEach(s => {
                     s.classList.toggle('active', s.getAttribute('data-color') === color);
                 });
-                document.getElementById('selectedColor').textContent = color;
+                if (selectedColorEl) selectedColorEl.textContent = color;
             });
         });
 
+        // ─── Cart + Wishlist storage ───
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart') || '[]');
+        }
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem('wishlist') || '[]');
+        }
+        function saveWishlist(wishlist) {
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        }
+
+        function isInWishlist(productId) {
+            return getWishlist().some(w => String(w.id) === String(productId));
+        }
+
+        function toggleWishlistProduct(productObj) {
+            const wishlist = getWishlist();
+            const idx = wishlist.findIndex(w => String(w.id) === String(productObj.id));
+            if (idx >= 0) wishlist.splice(idx, 1);
+            else wishlist.push(productObj);
+            saveWishlist(wishlist);
+            return idx < 0;
+        }
+
+
+
         // ─── Color Swatches ───
-        const PRICE = 250;
-        document.querySelectorAll('.swatch').forEach((sw, i) => {
+        const PRICE = product.price;
+        document.querySelectorAll('.swatch').forEach((sw) => {
             sw.addEventListener('click', () => {
                 document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
                 sw.classList.add('active');
@@ -2688,6 +2894,7 @@
                 gsap.fromTo(mainEmoji, { scale: .8, opacity: 0 }, { scale: 1, opacity: 1, duration: .35, ease: "back.out(1.7)" });
             });
         });
+
 
         // ─── Size Selector ───
         let selectedSize = null;
@@ -2717,6 +2924,75 @@
             gsap.fromTo('#qtyInput', { scale: .85 }, { scale: 1, duration: .2, ease: "back.out(2)" });
         });
 
+        // ─── Wishlist ───
+        const wishBtn = document.getElementById('wishlistBtn');
+
+        // Auto-save to wishlist as soon as the product page loads
+        // (if already present, it won't create duplicates)
+        if (wishBtn) {
+            const alreadyIn = isInWishlist(product.id);
+            if (!alreadyIn) {
+                toggleWishlistProduct({
+                    id: product.id,
+                    name: product.title,
+                    price: product.price,
+                    qty: 1,
+                    sku: product.sku,
+                    emoji: product.emoji,
+                });
+            }
+            wishBtn.classList.add('active');
+        }
+
+        if (wishBtn) {
+            wishBtn.addEventListener('click', function () {
+                const nowOn = toggleWishlistProduct({
+                    id: product.id,
+                    name: product.title,
+                    price: product.price,
+                    qty: 1,
+                    sku: product.sku,
+                    emoji: product.emoji,
+                });
+                this.classList.toggle('active', nowOn);
+                gsap.fromTo(this, { scale: .8 }, { scale: 1, duration: .35, ease: "back.out(2)" });
+                showToast(nowOn ? 'Added to wishlist ❤️' : 'Removed from wishlist', 'success');
+            });
+        }
+
+
+        function addToCartItem(productObj, amount, size, color) {
+            const cart = getCart();
+            const itemId = String(productObj.id) + '|' + String(size) + '|' + String(color);
+
+            const existing = cart.find(i => i.id === itemId);
+            if (existing) {
+                existing.qty = Math.min(10, existing.qty + amount);
+            } else {
+                cart.push({
+                    id: itemId,
+                    productId: productObj.id,
+                    name: productObj.title,
+                    price: productObj.price,
+                    qty: amount,
+                    size,
+                    color,
+                    sku: productObj.sku,
+                    emoji: productObj.emoji
+                });
+            }
+            saveCart(cart);
+        }
+
+        function updateCartBadge(amount = 0) {
+            const badge = document.getElementById('cartBadgeNav');
+            if (!badge) return;
+            const cart = getCart();
+            const total = cart.reduce((sum, i) => sum + (i.qty || 0), 0);
+            badge.textContent = String(total);
+            if (amount) gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: .4, ease: "back.out(2)" });
+        }
+
         // ─── Add to Cart ───
         document.getElementById('addToCartBtn').addEventListener('click', function () {
             if (!selectedSize) {
@@ -2725,14 +3001,13 @@
                 showToast('Please select a size first', 'error');
                 return;
             }
+
             const color = document.getElementById('selectedColor').textContent;
+            addToCartItem(product, qty, selectedSize, color);
+
             gsap.fromTo(this, { scale: .93 }, { scale: 1, duration: .3, ease: "back.out(2)" });
-            showToast(`👕 ${qty}x T-Shirt (${selectedSize}, ${color}) added to cart!`, 'success');
-            // Update badge
-            const badge = document.getElementById('cartBadgeNav');
-            const cur = parseInt(badge.textContent) || 0;
-            badge.textContent = cur + qty;
-            gsap.fromTo(badge, { scale: 1.5 }, { scale: 1, duration: .4, ease: "back.out(2)" });
+            showToast(`👕 ${qty}x ${product.title} (${selectedSize}, ${color}) added to cart!`, 'success');
+            updateCartBadge(qty);
         });
 
         // ─── Buy Now ───
@@ -2740,18 +3015,15 @@
             if (!selectedSize) {
                 showToast('Please select a size first', 'error'); return;
             }
+
+            const color = document.getElementById('selectedColor').textContent;
+            addToCartItem(product, qty, selectedSize, color);
+            updateCartBadge(qty);
+
             showToast('Redirecting to checkout…', 'info');
             setTimeout(() => window.location.href = 'checkout.html', 1200);
         });
 
-        // ─── Wishlist ───
-        const wishBtn = document.getElementById('wishlistBtn');
-        wishBtn.addEventListener('click', function () {
-            this.classList.toggle('active');
-            const on = this.classList.contains('active');
-            gsap.fromTo(this, { scale: .8 }, { scale: 1, duration: .35, ease: "back.out(2)" });
-            showToast(on ? 'Added to wishlist ❤️' : 'Removed from wishlist', 'success');
-        });
 
         // ─── Tabs ───
         function switchTab(name) {
