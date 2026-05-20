@@ -1037,50 +1037,83 @@
                                 <div class="form-section">
                                     <h3 class="section-title">Payment Method</h3>
                                     <div class="payment-methods">
-                                        <div class="payment-method" data-method="cash" id="paymentCash"
+                                        <div class="payment-method selected" data-method="cash" id="paymentCash"
                                             onclick="selectPaymentMethod('cash')">
                                             <div class="payment-method-icon">
                                                 <i class="fas fa-money-bill-wave"></i>
                                             </div>
-                                            <div class="payment-method-label">Cash on Delivery</div>
+                                            <div>
+                                                <div class="payment-method-label">Cash on Delivery</div>
+                                                <div class="payment-method-text">Pay when your order arrives</div>
+                                            </div>
                                         </div>
-
-                                        <div class="payment-method disabled" data-method="card" style="display:none;">
+                                        <div class="payment-method" data-method="instapay" id="paymentInstapay"
+                                            onclick="selectPaymentMethod('instapay')">
+                                            <div class="payment-method-icon">
+                                                <i class="fas fa-mobile-alt"></i>
+                                            </div>
+                                            <div>
+                                                <div class="payment-method-label">Instapay</div>
+                                                <div class="payment-method-text">Send screenshot via WhatsApp</div>
+                                            </div>
+                                        </div>
+                                        <div class="payment-method" data-method="vodafone" id="paymentVodafone"
+                                            onclick="selectPaymentMethod('vodafone')">
+                                            <div class="payment-method-icon">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                            <div>
+                                                <div class="payment-method-label">Vodafone Cash</div>
+                                                <div class="payment-method-text">Use Vodafone Cash number</div>
+                                            </div>
+                                        </div>
+                                        <div class="payment-method" data-method="card" id="paymentCard"
+                                            onclick="selectPaymentMethod('card')">
                                             <div class="payment-method-icon">
                                                 <i class="fas fa-credit-card"></i>
                                             </div>
-                                            <div class="payment-method-label">Credit Card</div>
-                                        </div>
-                                        <div class="payment-method disabled" data-method="paypal" style="display:none;">
-                                            <div class="payment-method-icon">
-                                                <i class="fab fa-paypal"></i>
+                                            <div>
+                                                <div class="payment-method-label">Credit/Debit Card</div>
+                                                <div class="payment-method-text">Secure card payment</div>
                                             </div>
-                                            <div class="payment-method-label">PayPal</div>
                                         </div>
-
                                     </div>
 
-                                    <div id="cardFields">
+                                    <div class="payment-details" id="detailsCash">
+                                        <p>Pay when your order arrives.</p>
+                                    </div>
+                                    <div class="payment-details" id="detailsInstapay" style="display:none;">
+                                        <p>Send the Instapay screenshot via WhatsApp to <strong>+20 123 456
+                                                7890</strong>.</p>
+                                    </div>
+                                    <div class="payment-details" id="detailsVodafone" style="display:none;">
+                                        <p>Use Vodafone Cash number <strong>0123 456 789</strong> and send confirmation
+                                            via WhatsApp.</p>
+                                    </div>
+                                    <div class="payment-details" id="detailsCard" style="display:none;">
                                         <div class="form-row">
                                             <div class="form-group full-width">
                                                 <label class="form-label">Card Number</label>
-                                                <input type="text" class="form-control"
-                                                    placeholder="1234 5678 9012 3456" required>
+                                                <input type="text" class="form-control" id="cardNumber"
+                                                    placeholder="1234 5678 9012 3456" maxlength="19" required>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group">
                                                 <label class="form-label">Expiry Date</label>
-                                                <input type="text" class="form-control" placeholder="MM/YY" required>
+                                                <input type="text" class="form-control" id="cardExpiry"
+                                                    placeholder="MM/YY" maxlength="5" required>
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">CVV</label>
-                                                <input type="text" class="form-control" placeholder="123" required>
+                                                <input type="text" class="form-control" id="cardCvv" placeholder="123"
+                                                    maxlength="4" required>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">Cardholder Name</label>
-                                            <input type="text" class="form-control" placeholder="John Doe" required>
+                                            <input type="text" class="form-control" id="cardName" placeholder="John Doe"
+                                                required>
                                         </div>
                                     </div>
                                 </div>
@@ -1090,58 +1123,34 @@
                                 <div class="order-summary">
                                     <h3 class="section-title">Order Summary</h3>
 
-                                    <div class="summary-products">
-                                        <div class="summary-product">
-                                            <div class="summary-product-image">
-                                                <i class="fas fa-tshirt fa-lg text-success"></i>
-                                            </div>
-                                            <div class="summary-product-info">
-                                                <div class="summary-product-title">Organic Cotton T-Shirt</div>
-                                                <div class="summary-product-meta">Qty: 1</div>
-                                            </div>
-                                            <div class="summary-product-price">EGP 250</div>
-                                        </div>
-                                        <div class="summary-product">
-                                            <div class="summary-product-image">
-                                                <i class="fas fa-pump-soap fa-lg text-info"></i>
-                                            </div>
-                                            <div class="summary-product-info">
-                                                <div class="summary-product-title">Natural Shampoo Bar</div>
-                                                <div class="summary-product-meta">Qty: 2</div>
-                                            </div>
-                                            <div class="summary-product-price">EGP 190</div>
-                                        </div>
-                                        <div class="summary-product">
-                                            <div class="summary-product-image">
-                                                <i class="fas fa-seedling fa-lg text-success"></i>
-                                            </div>
-                                            <div class="summary-product-info">
-                                                <div class="summary-product-title">Herb Garden Kit</div>
-                                                <div class="summary-product-meta">Qty: 1</div>
-                                            </div>
-                                            <div class="summary-product-price">EGP 120</div>
-                                        </div>
-                                    </div>
+                                    <div id="summaryProducts" class="summary-products"></div>
 
                                     <div class="summary-item">
                                         <span class="summary-label">Subtotal</span>
-                                        <span class="summary-value">EGP 560</span>
+                                        <span class="summary-value" id="summarySubtotal">EGP 0</span>
+                                    </div>
+                                    <div class="summary-item" id="promoRow" style="display:none;">
+                                        <span class="summary-label">Promo Discount</span>
+                                        <span class="summary-value text-success" id="summaryDiscount">-EGP 0</span>
                                     </div>
                                     <div class="summary-item">
                                         <span class="summary-label">Shipping</span>
-                                        <span class="summary-value">EGP 50</span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span class="summary-label">Tax</span>
-                                        <span class="summary-value">EGP 39</span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span class="summary-label">Discount</span>
-                                        <span class="summary-value text-success">-EGP 28</span>
+                                        <span class="summary-value" id="summaryShipping">EGP 0</span>
                                     </div>
                                     <div class="summary-item">
                                         <span class="summary-label">Total</span>
-                                        <span class="summary-value">EGP 621</span>
+                                        <span class="summary-value" id="summaryTotal">EGP 0</span>
+                                    </div>
+
+                                    <div class="promo-code-box"
+                                        style="margin:1rem 0;display:grid;grid-template-columns:1fr auto;gap:.75rem;">
+                                        <input type="text" class="form-control" id="promoInput"
+                                            placeholder="Promo code">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                            id="promoButton">Apply</button>
+                                        <div id="promoMessage"
+                                            style="grid-column:1 / -1;color:var(--success);font-size:.9rem;margin-top:.5rem;">
+                                        </div>
                                     </div>
 
                                     <button class="place-order-btn" id="placeOrderBtn">
@@ -1276,15 +1285,163 @@
             });
         });
 
-        // Payment Method Selection
         const paymentMethods = document.querySelectorAll('.payment-method');
+        let selectedPaymentMethod = 'cash';
+        const PROMO_CODES = {
+            ECO10: { type: 'percent', amount: 10 },
+            ECO20: { type: 'percent', amount: 20 },
+            SAVE50: { type: 'fixed', amount: 50 },
+            GREEN: { type: 'percent', amount: 15 },
+            NEWUSER: { type: 'fixed', amount: 30 }
+        };
+        let appliedPromo = null;
+        let appliedPromoCode = '';
 
-        paymentMethods.forEach(method => {
-            method.addEventListener('click', () => {
-                paymentMethods.forEach(m => m.classList.remove('selected'));
-                method.classList.add('selected');
+        function getCartItems() {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                return Array.isArray(cart) ? cart : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveCartItems(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            paymentMethods.forEach(m => {
+                m.classList.toggle('selected', m.dataset.method === method);
             });
-        });
+            document.querySelectorAll('.payment-details').forEach(d => d.style.display = 'none');
+            const details = document.getElementById(`details${method.charAt(0).toUpperCase() + method.slice(1)}`);
+            if (details) details.style.display = '';
+        }
+
+        function formatCardNumber(value) {
+            return value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        function formatExpiry(value) {
+            const digits = value.replace(/\D/g, '').slice(0, 4);
+            if (digits.length <= 2) return digits;
+            return `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+        }
+
+        const cardNumberInput = document.getElementById('cardNumber');
+        const cardExpiryInput = document.getElementById('cardExpiry');
+        const cardCvvInput = document.getElementById('cardCvv');
+        const cardNameInput = document.getElementById('cardName');
+
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', e => {
+                e.target.value = formatCardNumber(e.target.value);
+            });
+        }
+        if (cardExpiryInput) {
+            cardExpiryInput.addEventListener('input', e => {
+                e.target.value = formatExpiry(e.target.value);
+            });
+        }
+        if (cardCvvInput) {
+            cardCvvInput.addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+            });
+        }
+
+        function renderOrderSummary() {
+            const cart = getCartItems();
+            const productsContainer = document.getElementById('summaryProducts');
+            const subtotalEl = document.getElementById('summarySubtotal');
+            const shippingEl = document.getElementById('summaryShipping');
+            const totalEl = document.getElementById('summaryTotal');
+            const promoRow = document.getElementById('promoRow');
+            const discountEl = document.getElementById('summaryDiscount');
+
+            if (!productsContainer || !subtotalEl || !shippingEl || !totalEl) return;
+
+            if (cart.length === 0) {
+                productsContainer.innerHTML = `<div class="summary-empty">Your cart is empty. <a href="products.html">Browse products</a> to add items.</div>`;
+                subtotalEl.textContent = 'EGP 0';
+                shippingEl.textContent = 'EGP 0';
+                totalEl.textContent = 'EGP 0';
+                if (promoRow) promoRow.style.display = 'none';
+                return;
+            }
+
+            productsContainer.innerHTML = cart.map(item => {
+                const qty = Number(item.qty || 1);
+                const price = Number(item.price || 0);
+                const lineTotal = qty * price;
+                return `
+                    <div class="summary-product">
+                        <div class="summary-product-image"><i class="fas fa-leaf fa-lg text-success"></i></div>
+                        <div class="summary-product-info">
+                            <div class="summary-product-title">${item.name}</div>
+                            <div class="summary-product-meta">Qty: ${qty}</div>
+                        </div>
+                        <div class="summary-product-price">EGP ${lineTotal.toLocaleString()}</div>
+                    </div>`;
+            }).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 1), 0);
+            const shipping = subtotal >= 500 ? 0 : 50;
+            let discount = 0;
+            if (appliedPromo) {
+                if (appliedPromo.type === 'percent') {
+                    discount = Math.round((appliedPromo.amount / 100) * subtotal);
+                } else {
+                    discount = Number(appliedPromo.amount || 0);
+                }
+                discount = Math.min(discount, subtotal);
+            }
+            const total = Math.max(0, subtotal - discount + shipping);
+
+            subtotalEl.textContent = `EGP ${subtotal.toLocaleString()}`;
+            shippingEl.textContent = shipping === 0 ? 'FREE' : `EGP ${shipping}`;
+            totalEl.textContent = `EGP ${total.toLocaleString()}`;
+
+            if (promoRow) {
+                if (discount > 0) {
+                    promoRow.style.display = '';
+                    discountEl.textContent = `-EGP ${discount.toLocaleString()}`;
+                } else {
+                    promoRow.style.display = 'none';
+                }
+            }
+        }
+
+        function applyPromo() {
+            const promoInput = document.getElementById('promoInput');
+            const promoMessage = document.getElementById('promoMessage');
+            if (!promoInput || !promoMessage) return;
+
+            const code = promoInput.value.trim().toUpperCase();
+            const promo = PROMO_CODES[code];
+            if (!code || !promo) {
+                appliedPromo = null;
+                appliedPromoCode = '';
+                promoMessage.textContent = code ? 'Invalid promo code' : 'Enter a promo code';
+                promoMessage.style.color = 'var(--danger)';
+                renderOrderSummary();
+                return;
+            }
+
+            appliedPromo = promo;
+            appliedPromoCode = code;
+            promoMessage.textContent = promo.type === 'percent'
+                ? `${promo.amount}% discount applied`
+                : `EGP ${promo.amount} discount applied`;
+            promoMessage.style.color = 'var(--success)';
+            renderOrderSummary();
+        }
+
+        const promoButton = document.getElementById('promoButton');
+        if (promoButton) {
+            promoButton.addEventListener('click', applyPromo);
+        }
 
         // Form Validation
         const form = document.querySelector('.checkout-form');
@@ -1292,34 +1449,108 @@
 
         placeOrderBtn.addEventListener('click', (e) => {
             e.preventDefault();
-
-            // Basic validation
-            const requiredFields = form.querySelectorAll('input[required]');
             let isValid = true;
+            let errorMessage = '';
 
-            requiredFields.forEach(field => {
+            const visibleRequired = [...form.querySelectorAll('input[required]')].filter(input => input.offsetParent !== null);
+            visibleRequired.forEach(field => {
                 if (!field.value.trim()) {
                     field.style.borderColor = 'var(--danger)';
                     isValid = false;
+                    if (!errorMessage) errorMessage = 'Please fill in all required fields';
                 } else {
                     field.style.borderColor = 'var(--sand)';
                 }
             });
 
-            if (isValid) {
-                gsap.to(placeOrderBtn, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
-                showToast('Processing your order...', 'info');
-
-                // Simulate order processing
-                setTimeout(() => {
-                    showToast('Order placed successfully!', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 2000);
-                }, 2000);
-            } else {
-                showToast('Please fill in all required fields', 'error');
+            const cart = getCartItems();
+            if (cart.length === 0) {
+                isValid = false;
+                errorMessage = 'Your cart is empty. Add items before checkout';
             }
+
+            const shippingSelected = document.querySelector('input[name="shipping"]:checked');
+            if (!shippingSelected) {
+                isValid = false;
+                errorMessage = 'Please choose a shipping method';
+            }
+
+            if (selectedPaymentMethod === 'card') {
+                const cardNumber = cardNumberInput ? cardNumberInput.value.replace(/\s/g, '') : '';
+                const expiry = cardExpiryInput ? cardExpiryInput.value.trim() : '';
+                const cvv = cardCvvInput ? cardCvvInput.value.trim() : '';
+                const cardName = cardNameInput ? cardNameInput.value.trim() : '';
+
+                if (!/^[0-9]{16}$/.test(cardNumber)) {
+                    isValid = false;
+                    errorMessage = 'Enter a valid 16-digit card number';
+                    if (cardNumberInput) cardNumberInput.style.borderColor = 'var(--danger)';
+                }
+                if (!/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(expiry)) {
+                    isValid = false;
+                    errorMessage = 'Enter a valid expiry date in MM/YY format';
+                    if (cardExpiryInput) cardExpiryInput.style.borderColor = 'var(--danger)';
+                }
+                if (!/^[0-9]{3,4}$/.test(cvv)) {
+                    isValid = false;
+                    errorMessage = 'Enter a valid CVV';
+                    if (cardCvvInput) cardCvvInput.style.borderColor = 'var(--danger)';
+                }
+                if (cardName.length < 3) {
+                    isValid = false;
+                    errorMessage = 'Enter the cardholder name';
+                    if (cardNameInput) cardNameInput.style.borderColor = 'var(--danger)';
+                }
+            }
+
+            if (!isValid) {
+                showToast(errorMessage || 'Please complete the form correctly', 'error');
+                return;
+            }
+
+            placeOrderBtn.disabled = true;
+            const originalText = placeOrderBtn.innerHTML;
+            placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            gsap.to(placeOrderBtn, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
+            showToast('Processing your order...', 'info');
+
+            setTimeout(() => {
+                const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 1), 0);
+                const shipping = subtotal >= 500 ? 0 : 50;
+                let discount = 0;
+                if (appliedPromo) {
+                    discount = appliedPromo.type === 'percent'
+                        ? Math.round((appliedPromo.amount / 100) * subtotal)
+                        : Number(appliedPromo.amount || 0);
+                    discount = Math.min(discount, subtotal);
+                }
+                const total = Math.max(0, subtotal - discount + shipping);
+                const ordersKey = 'orders';
+                const existingOrders = (() => {
+                    try { const raw = localStorage.getItem(ordersKey); const parsed = JSON.parse(raw || '[]'); return Array.isArray(parsed) ? parsed : []; } catch (err) { return []; }
+                })();
+                const order = {
+                    id: `ECO-${Date.now()}`,
+                    date: new Date().toISOString(),
+                    status: 'confirmed',
+                    items: cart,
+                    subtotal,
+                    discount,
+                    shipping,
+                    total,
+                    paymentMethod: selectedPaymentMethod,
+                    promoCode: appliedPromoCode || null
+                };
+                existingOrders.push(order);
+                localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+                localStorage.setItem('cart', JSON.stringify([]));
+
+                showToast('Order placed successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 2000);
         });
 
         // Toast Notifications
@@ -1385,6 +1616,8 @@
 
         // Call updateLoginUI on page load
         updateLoginUI();
+        selectPaymentMethod('cash');
+        renderOrderSummary();
 
         // Reduced motion: disable GSAP animations/ScrollTrigger behavior
         const __prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

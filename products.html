@@ -1485,10 +1485,49 @@
 
         /* ── Wishlist toggle ── */
         function toggleWishlist(btn, name) {
-            btn.classList.toggle('active');
-            const added = btn.classList.contains('active');
-            showToast(added ? `"${name}" added to wishlist ❤️` : `"${name}" removed from wishlist`, added ? 'info' : 'warning');
+            const col = btn.closest('.product-col');
+            if (!col) return;
+
+            const productId = String(col.dataset.productId || '');
+            const price = Number(col.dataset.price || 0);
+            const category = col.dataset.category || 'General';
+            const rating = Number(col.dataset.rating || 4.5);
+            const iconEl = col.querySelector('.product-image i');
+            const icon = iconEl ? iconEl.className : 'fas fa-leaf';
+
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const index = wishlist.findIndex(item => String(item.id) === productId);
+            const isAdded = index < 0;
+
+            if (isAdded) {
+                wishlist.push({
+                    id: productId,
+                    name,
+                    price,
+                    oldPrice: null,
+                    category,
+                    rating,
+                    reviews: 0,
+                    icon,
+                    badge: null
+                });
+                btn.classList.add('active');
+            } else {
+                wishlist.splice(index, 1);
+                btn.classList.remove('active');
+            }
+
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            showToast(isAdded ? `"${name}" added to wishlist ❤️` : `"${name}" removed from wishlist`, isAdded ? 'success' : 'warning');
         }
+
+        (function restoreWishlistBtns() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            wishlist.forEach(item => {
+                const btn = document.querySelector(`.product-col[data-product-id="${item.id}"] .wishlist-btn`);
+                if (btn) btn.classList.add('active');
+            });
+        })();
 
         /* ── Filter + Search + Sort ── */
         let activeFilter = 'all';

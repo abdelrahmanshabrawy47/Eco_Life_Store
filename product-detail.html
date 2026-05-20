@@ -2695,6 +2695,92 @@
                     }
                 }
             },
+            2: {
+                id: 2,
+                category: 'Personal Care',
+                title: 'Natural Shampoo Bar',
+                price: 95,
+                originalPrice: 115,
+                savePercent: 17,
+                description: `Nourish your hair with our zero-waste natural shampoo bar. Crafted with botanical extracts and gentle surfactants, it cleanses without stripping moisture and leaves your hair soft and refreshed.`,
+                sku: 'ECO-SHAMP-002',
+                material: 'Plant-based oils',
+                care: 'Store in a dry soap dish between uses',
+                origin: 'Made in Egypt',
+                availabilityText: 'In Stock',
+                availabilityInStock: true,
+                ratingScore: 4.8,
+                ratingCount: 94,
+                colors: ['Warm Amber', 'Ocean Blue'],
+                emoji: '🧴',
+                galleryBg: [
+                    'linear-gradient(135deg,#d7ccc8,#a1887f)',
+                    'linear-gradient(135deg,#b3e5fc,#81d4fa)'
+                ],
+                defaultColor: 'Warm Amber',
+                sizes: ['100g'],
+                unavailableSizes: [],
+                tabs: {
+                    description: {
+                        title: 'Zero-Waste Natural Shampoo Bar',
+                        paragraphs: [
+                            `This solid shampoo bar is formulated for clean, shiny hair with no plastic waste. Rich in coconut and olive oils, it works well for normal to dry hair types.`,
+                            `Each bar lasts up to 60 washes and comes wrapped in recycled paper. It is sulfate-free, cruelty-free, and gentle on sensitive scalps.`
+                        ],
+                        bullets: [
+                            'Plastic-free shampoo bar',
+                            'Sulfate-free and gentle',
+                            'Rich in botanical extracts',
+                            'Long-lasting and travel-friendly',
+                            'Packaged in recycled paper',
+                            'Perfect for daily use'
+                        ]
+                    }
+                }
+            },
+            3: {
+                id: 3,
+                category: 'Food & Drinks',
+                title: 'Organic Apple Juice',
+                price: 35,
+                originalPrice: 45,
+                savePercent: 22,
+                description: `Enjoy fresh-pressed organic apple juice made from sun-ripened apples. No added sugar, no preservatives, just pure fruity refreshment in every sip.`,
+                sku: 'ECO-JUICE-003',
+                material: '100% Apple Juice',
+                care: 'Keep refrigerated after opening',
+                origin: 'Farm Fresh Egypt',
+                availabilityText: 'In Stock',
+                availabilityInStock: true,
+                ratingScore: 4.7,
+                ratingCount: 58,
+                colors: ['Golden', 'Apple Green'],
+                emoji: '🍎',
+                galleryBg: [
+                    'linear-gradient(135deg,#fff9c4,#ffe082)',
+                    'linear-gradient(135deg,#c8e6c9,#a5d6a7)'
+                ],
+                defaultColor: 'Golden',
+                sizes: ['500ml'],
+                unavailableSizes: [],
+                tabs: {
+                    description: {
+                        title: 'Cold-Pressed Organic Apple Juice',
+                        paragraphs: [
+                            `Our organic apple juice is cold-pressed to preserve natural flavor, vitamins, and antioxidants. It is made from premium apples sourced from local organic farms.`,
+                            `Enjoy a crisp, refreshing drink with no added sugars or artificial ingredients. Great for breakfast, smoothies, or as a healthy snack.`
+                        ],
+                        bullets: [
+                            '100% organic apple juice',
+                            'No added sugar or preservatives',
+                            'Cold-pressed for freshness',
+                            'Packed in recyclable glass bottles',
+                            'Supports local organic farms',
+                            'Perfect for kids and adults alike'
+                        ]
+                    }
+                }
+            },
             4: {
                 id: 4,
                 category: 'Sustainable Fashion',
@@ -2724,6 +2810,49 @@
                 sizes: ['XS', 'S', 'M', 'L', 'XL'],
                 unavailableSizes: [],
                 tabs: {}
+            },
+            5: {
+                id: 5,
+                category: 'Garden & Plants',
+                title: 'Herb Garden Kit',
+                price: 120,
+                originalPrice: 145,
+                savePercent: 17,
+                description: `Grow your own herbs with this easy starter kit. Includes seed packets, soil discs, and eco-friendly planters for a greener home garden.`,
+                sku: 'ECO-GARDEN-005',
+                material: 'Biodegradable planters',
+                care: 'Keep soil moist and place in sunlight',
+                origin: 'Sustainably sourced',
+                availabilityText: 'In Stock',
+                availabilityInStock: true,
+                ratingScore: 4.9,
+                ratingCount: 81,
+                colors: ['Leaf Green', 'Earth Brown'],
+                emoji: '🌿',
+                galleryBg: [
+                    'linear-gradient(135deg,#c8e6c9,#81c784)',
+                    'linear-gradient(135deg,#dcedc8,#c5e1a5)'
+                ],
+                defaultColor: 'Leaf Green',
+                sizes: ['Standard Kit'],
+                unavailableSizes: [],
+                tabs: {
+                    description: {
+                        title: 'Complete Herb Garden Kit',
+                        paragraphs: [
+                            `Everything you need to get started with growing fresh herbs at home, including organic seeds and eco-friendly accessories.`,
+                            `Perfect for windowsills, balconies, or small kitchens. Designed to make sustainable gardening easy for beginners.`
+                        ],
+                        bullets: [
+                            'Includes seed packets and planters',
+                            'Biodegradable materials',
+                            'Easy step-by-step instructions',
+                            'Works indoors or outdoors',
+                            'Helps you grow fresh herbs at home',
+                            'Great gift for eco-conscious gardeners'
+                        ]
+                    }
+                }
             },
             6: {
                 id: 6,
@@ -2763,7 +2892,9 @@
             return PRODUCTS[id];
         }
 
+
         const product = getProductFromQuery();
+
 
         // sync static DOM placeholders from product catalog
         document.querySelector('.product-category') && (document.querySelector('.product-category').textContent = `${product.category}`);
@@ -2927,32 +3058,23 @@
         // ─── Wishlist ───
         const wishBtn = document.getElementById('wishlistBtn');
 
-        // Auto-save to wishlist as soon as the product page loads
-        // (if already present, it won't create duplicates)
         if (wishBtn) {
             const alreadyIn = isInWishlist(product.id);
-            if (!alreadyIn) {
-                toggleWishlistProduct({
-                    id: product.id,
-                    name: product.title,
-                    price: product.price,
-                    qty: 1,
-                    sku: product.sku,
-                    emoji: product.emoji,
-                });
-            }
-            wishBtn.classList.add('active');
+            wishBtn.classList.toggle('active', alreadyIn);
         }
 
         if (wishBtn) {
             wishBtn.addEventListener('click', function () {
                 const nowOn = toggleWishlistProduct({
-                    id: product.id,
+                    id: String(product.id),
                     name: product.title,
                     price: product.price,
-                    qty: 1,
-                    sku: product.sku,
-                    emoji: product.emoji,
+                    oldPrice: product.originalPrice || null,
+                    category: product.category,
+                    rating: Number(product.ratingScore || 4.5),
+                    reviews: 0,
+                    icon: 'fas fa-leaf',
+                    badge: null
                 });
                 this.classList.toggle('active', nowOn);
                 gsap.fromTo(this, { scale: .8 }, { scale: 1, duration: .35, ease: "back.out(2)" });
